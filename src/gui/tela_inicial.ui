@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>518</width>
+    <height>396</height>
+   </rect>
+  </property>
+  <property name="font">
+   <font>
+    <pointsize>8</pointsize>
+   </font>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QLabel" name="label1">
+    <property name="geometry">
+     <rect>
+      <x>180</x>
+      <y>210</y>
+      <width>141</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+     </font>
+    </property>
+    <property name="toolTip">
+     <string>Numero de vezes que o botão foi pressionado.</string>
+    </property>
+    <property name="text">
+     <string>Vezes clicado: ###</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="button1">
+    <property name="geometry">
+     <rect>
+      <x>180</x>
+      <y>170</y>
+      <width>141</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+     </font>
+    </property>
+    <property name="statusTip">
+     <string>Incrementa o contador de cliques.</string>
+    </property>
+    <property name="text">
+     <string>Clique em min!</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>518</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuTelas">
+    <property name="title">
+     <string>Inicio</string>
+    </property>
+    <addaction name="actionTela_Inicia"/>
+    <addaction name="separator"/>
+    <addaction name="actionReconhecer"/>
+    <addaction name="actionHist_rico"/>
+    <addaction name="actionConfigura_es"/>
+    <addaction name="separator"/>
+    <addaction name="actionSobre"/>
+   </widget>
+   <addaction name="menuTelas"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionReconhecer">
+   <property name="text">
+    <string>Reconhecer...</string>
+   </property>
+   <property name="statusTip">
+    <string>Inicia o assistente de reconehcimento de emoções em música.</string>
+   </property>
+  </action>
+  <action name="actionHist_rico">
+   <property name="text">
+    <string>Histórico</string>
+   </property>
+   <property name="statusTip">
+    <string>Visita o histórico de emoções reconhecidas em músicas pelo programa.</string>
+   </property>
+  </action>
+  <action name="actionConfigura_es">
+   <property name="text">
+    <string>Configurações</string>
+   </property>
+   <property name="statusTip">
+    <string>Acessa as configuações do programa.</string>
+   </property>
+  </action>
+  <action name="actionSobre">
+   <property name="text">
+    <string>Sobre</string>
+   </property>
+   <property name="statusTip">
+    <string>Sobre o programa, os autores e o trabalho realizado.</string>
+   </property>
+  </action>
+  <action name="actionTela_Inicia">
+   <property name="text">
+    <string>Tela Inicial</string>
+   </property>
+   <property name="statusTip">
+    <string>Vai para a tela inicial do programa.</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

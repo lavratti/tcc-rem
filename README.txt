@@ -1,0 +1,1 @@
+Vamos usar o git de maneira bem básica, tudo no master por enquanto.

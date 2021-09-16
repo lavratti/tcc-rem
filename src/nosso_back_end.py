@@ -1,10 +1,13 @@
 import os
+import time
+
 import matplotlib
 matplotlib.use('Agg') # No pictures displayed
 import pylab
 import librosa
 import librosa.display
 import numpy as np
+from PyQt5.QtCore import QThread, pyqtSignal
 
 
 def gerar_espectograma(amostra):
@@ -21,6 +24,38 @@ def gerar_espectograma(amostra):
     print("Espec. OK")
 
 
-def processar_lista(lista):
-    for amostra in lista:
-        gerar_espectograma(amostra)
+class ThreadedProcessarLista(QThread):
+
+    progresso_total = pyqtSignal(int)
+    progresso_parcial = pyqtSignal(int)
+
+    def __init__(self, parent=None, amostras=None):
+        super(ThreadedProcessarLista, self).__init__(parent)
+        if not amostras:
+            amostras = []
+        self.amostras = amostras
+        self.is_running = True
+
+    def run(self):
+
+        amostras_processadas = 0
+        self.progresso_total.emit(0)
+
+        for amostra in self.amostras:
+
+            progresso_na_amostra = 0
+            self.progresso_parcial.emit(progresso_na_amostra)
+            gerar_espectograma(amostra)
+            progresso_na_amostra = 50
+            self.progresso_parcial.emit(progresso_na_amostra)
+
+            for progresso_na_amostra in range(51,100):
+                self.progresso_parcial.emit(progresso_na_amostra+1)
+                time.sleep(0.002)
+
+            amostras_processadas += 1
+            progresso_na_lista = int(100 * (amostras_processadas / len(self.amostras)))
+            self.progresso_total.emit(progresso_na_lista)
+
+        self.progresso_total.emit(100)
+        self.is_running = False

@@ -38,7 +38,7 @@
     </sizepolicy>
    </property>
    <property name="currentIndex">
-    <number>5</number>
+    <number>2</number>
    </property>
    <widget class="QWidget" name="tela_inicial">
     <widget class="QLabel" name="tela_inicial_label_1">
@@ -934,6 +934,22 @@ p, li { white-space: pre-wrap; }
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>tela_reco_listWidget</sender>
+   <signal>itemDoubleClicked(QListWidgetItem*)</signal>
+   <receiver>Form</receiver>
+   <slot>remover_amostra()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>161</x>
+     <y>369</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>49</x>
+     <y>-15</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>mudar_tela_reconhecer()</slot>
@@ -948,5 +964,6 @@ p, li { white-space: pre-wrap; }
   <slot>importar_historico()</slot>
   <slot>salvar_configuracoes()</slot>
   <slot>voltar_as_configuracoes_iniciais()</slot>
+  <slot>remover_amostra()</slot>
  </slots>
 </ui>

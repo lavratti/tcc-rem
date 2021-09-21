@@ -38,7 +38,7 @@
     </sizepolicy>
    </property>
    <property name="currentIndex">
-    <number>2</number>
+    <number>3</number>
    </property>
    <widget class="QWidget" name="tela_inicial">
     <widget class="QLabel" name="tela_inicial_label_1">

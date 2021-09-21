@@ -13,9 +13,19 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 import os, popup_progresso
 
-from PyQt5.QtWidgets import QMessageBox
+from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QPixmap
+from PyQt5.QtWidgets import QMessageBox, QListWidgetItem
 
-from src import nosso_back_end
+from src import nosso_back_end, handler_historico
+
+
+def formatar_resultado(dict_resultado):
+    s = ""
+    for key in dict_resultado:
+        s += "{}: {}\n\n".format(key, dict_resultado[key])
+    return s
+
 
 class Ui_Form(object):
 
@@ -122,8 +132,8 @@ class Ui_Form(object):
         self.tela_resultado_splitter.setGeometry(QtCore.QRect(330, 560, 461, 40))
         self.tela_resultado_splitter.setOrientation(QtCore.Qt.Horizontal)
         self.tela_resultado_splitter.setObjectName("tela_resultado_splitter")
-        self.tela_resultado_botao_salvar = QtWidgets.QPushButton(self.tela_resultado_splitter)
-        self.tela_resultado_botao_salvar.setObjectName("tela_resultado_botao_salvar")
+        #self.tela_resultado_botao_salvar = QtWidgets.QPushButton(self.tela_resultado_splitter)
+        #self.tela_resultado_botao_salvar.setObjectName("tela_resultado_botao_salvar")
         self.tela_resultado_botao_voltar = QtWidgets.QPushButton(self.tela_resultado_splitter)
         self.tela_resultado_botao_voltar.setObjectName("tela_resultado_botao_voltar")
         self.stackedWidget.addWidget(self.tela_resultado)
@@ -147,10 +157,10 @@ class Ui_Form(object):
         self.tela_historico_listWidget.setAlternatingRowColors(False)
         self.tela_historico_listWidget.setViewMode(QtWidgets.QListView.ListMode)
         self.tela_historico_listWidget.setObjectName("tela_historico_listWidget")
-        item = QtWidgets.QListWidgetItem()
-        item.setFlags(QtCore.Qt.ItemIsSelectable|QtCore.Qt.ItemIsUserCheckable|QtCore.Qt.ItemIsEnabled)
-        item.setCheckState(QtCore.Qt.Unchecked)
-        self.tela_historico_listWidget.addItem(item)
+        # item = QtWidgets.QListWidgetItem()
+        # item.setFlags(QtCore.Qt.ItemIsSelectable|QtCore.Qt.ItemIsUserCheckable|QtCore.Qt.ItemIsEnabled)
+        # item.setCheckState(QtCore.Qt.Unchecked)
+        # self.tela_historico_listWidget.addItem(item)
         self.tela_historico_textBrowser = QtWidgets.QTextBrowser(self.tela_historico_splitter_listas)
         self.tela_historico_textBrowser.setObjectName("tela_historico_textBrowser")
         self.tela_historico_splitter_botoes = QtWidgets.QSplitter(self.tela_historico)
@@ -225,16 +235,22 @@ class Ui_Form(object):
         self.tela_reco_botao_voltar.clicked.connect(self.mudar_tela_inicial)
         self.tela_reco_botao_add_amostra.clicked.connect(self.dialogo_adcionar_amostra)
         self.tela_reco_botao_reconhecer.clicked.connect(self.reconhecer)
-        self.tela_resultado_botao_salvar.clicked.connect(self.salvar_resultado_atual_no_historico)
+        #self.tela_resultado_botao_salvar.clicked.connect(self.salvar_resultado_atual_no_historico)
         self.tela_resultado_botao_voltar.clicked.connect(self.mudar_tela_inicial)
-        self.tela_historico_botao_limpar_selecao.clicked.connect(self.tela_historico_listWidget.clearSelection)
+        self.tela_historico_botao_limpar_selecao.clicked.connect(self.limpar_selecao)
         self.tela_historico_botao_exportar.clicked.connect(self.exportar_historico)
         self.tela_historico_botao_importar.clicked.connect(self.importar_historico)
         self.tela_historico_botao_voltar.clicked.connect(self.mudar_tela_inicial)
+        self.tela_historico_listWidget.itemSelectionChanged.connect(self.atualizar_tela_historico)
+        self.tela_historico_listWidget.itemChanged.connect(self.atualizar_tela_historico)
         self.tela_configs_botao_salvar.clicked.connect(self.salvar_configuracoes)
         self.tela_configs_voltar_sem_salvar.clicked.connect(self.mudar_tela_inicial)
         self.tela_configs_botao_reset_configs.clicked.connect(self.voltar_as_configuracoes_iniciais)
         self.tela_reco_listWidget.itemDoubleClicked.connect(self.remover_amostra)
+
+        # DECLARAR VARS AQUI!
+        self.proxima_tela = 0
+        self.historico = handler_historico.Historico("historico.json")
 
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
@@ -300,14 +316,14 @@ class Ui_Form(object):
 "<p style=\" margin-top:0px; margin-bottom:27px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; background-color:#ffffff;\"><span style=\" font-family:\'Titillium Web\',\'Arial\',\'Helvetica\',\'sans-serif\'; font-size:16px; font-weight:600; color:#404244;\">See also </span><a href=\"https://doc.qt.io/qt-5/qfiledialog.html#setDirectoryUrl\"><span style=\" font-family:\'Titillium Web\',\'Arial\',\'Helvetica\',\'sans-serif\'; font-size:16px; text-decoration: underline; color:#17a81a;\">setDirectoryUrl</span></a><span style=\" font-family:\'Titillium Web\',\'Arial\',\'Helvetica\',\'sans-serif\'; font-size:16px; color:#404244;\">().</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:27px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; background-color:#ffffff;\"><span style=\" font-family:\'Titillium Web\',\'Arial\',\'Helvetica\',\'sans-serif\'; font-size:16px; color:#404244; background-color:#ffffff;\">This function was introduced in Qt 5.2.</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:27px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; background-color:#ffffff;\"><span style=\" font-family:\'Titillium Web\',\'Arial\',\'Helvetica\',\'sans-serif\'; font-size:16px; font-weight:600; color:#404244;\">See also </span><a href=\"https://doc.qt.io/qt-5/qfiledialog.html#getExistingDirectory\"><span style=\" font-family:\'Titillium Web\',\'Arial\',\'Helvetica\',\'sans-serif\'; font-size:16px; text-decoration: underline; color:#17a81a;\">getExistingDirectory</span></a><span style=\" font-family:\'Titillium Web\',\'Arial\',\'Helvetica\',\'sans-serif\'; font-size:16px; color:#404244;\">(), </span><a href=\"https://doc.qt.io/qt-5/qfiledialog.html#getOpenFileUrl\"><span style=\" font-family:\'Titillium Web\',\'Arial\',\'Helvetica\',\'sans-serif\'; font-size:16px; text-decoration: underline; color:#17a81a;\">getOpenFileUrl</span></a><span style=\" font-family:\'Titillium Web\',\'Arial\',\'Helvetica\',\'sans-serif\'; font-size:16px; color:#404244;\">(), </span><a href=\"https://doc.qt.io/qt-5/qfiledialog.html#getOpenFileUrls\"><span style=\" font-family:\'Titillium Web\',\'Arial\',\'Helvetica\',\'sans-serif\'; font-size:16px; text-decoration: underline; color:#17a81a;\">getOpenFileUrls</span></a><span style=\" font-family:\'Titillium Web\',\'Arial\',\'Helvetica\',\'sans-serif\'; font-size:16px; color:#404244;\">(), and </span><a href=\"https://doc.qt.io/qt-5/qfiledialog.html#getSaveFileUrl\"><span style=\" font-family:\'Titillium Web\',\'Arial\',\'Helvetica\',\'sans-serif\'; font-size:16px; text-decoration: underline; color:#17a81a;\">getSaveFileUrl</span></a><span style=\" font-family:\'Titillium Web\',\'Arial\',\'Helvetica\',\'sans-serif\'; font-size:16px; color:#404244;\">().</span></p></body></html>"))
-        self.tela_resultado_botao_salvar.setText(_translate("Form", "Salvar no histórico"))
+        #self.tela_resultado_botao_salvar.setText(_translate("Form", "Salvar no histórico"))
         self.tela_resultado_botao_voltar.setText(_translate("Form", "Voltar"))
         self.tela_historico_label_1.setText(_translate("Form", "Histórico"))
         self.tela_historico_listWidget.setSortingEnabled(False)
         __sortingEnabled = self.tela_historico_listWidget.isSortingEnabled()
         self.tela_historico_listWidget.setSortingEnabled(False)
-        item = self.tela_historico_listWidget.item(0)
-        item.setText(_translate("Form", "ItemExemplo1"))
+        #item = self.tela_historico_listWidget.item(0)
+        #item.setText(_translate("Form", "ItemExemplo1"))
         self.tela_historico_listWidget.setSortingEnabled(__sortingEnabled)
         self.tela_historico_textBrowser.setHtml(_translate("Form", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
@@ -364,10 +380,57 @@ class Ui_Form(object):
         index = self.stackedWidget.indexOf(self.tela_reco)
         self.stackedWidget.setCurrentIndex(index)
 
+    def mudar_tela_resultado(self):
+        print("UI -> tela resultado")
+        dict_resultado = self.historico.buscar_ultimo()
+        string_formatada = formatar_resultado(dict_resultado)
+        self.tela_resultado_textBrowser.setText(string_formatada)
+        pixmap = QPixmap(dict_resultado['spectogram'])
+        self.tela_resultado_label_figura.setPixmap(pixmap)
+        index = self.stackedWidget.indexOf(self.tela_resultado)
+        self.stackedWidget.setCurrentIndex(index)
+
     def mudar_tela_historico(self):
         print("UI -> tela historico")
         index = self.stackedWidget.indexOf(self.tela_historico)
+        self.tela_historico_listWidget.clear()
+        dict_resultados = self.historico.buscar_historico()
+        for key in sorted(dict_resultados, key=int):
+            text = "{}  {}".format(key, dict_resultados[key]['arquivo'])
+            item = QListWidgetItem(text)
+            item.setFlags(item.flags() | QtCore.Qt.ItemIsUserCheckable)
+            item.setCheckState(QtCore.Qt.Unchecked)
+            self.tela_historico_listWidget.addItem(item)
+        self.tela_historico_listWidget.setCurrentRow(0)
+        self.atualizar_tela_historico()
         self.stackedWidget.setCurrentIndex(index)
+
+    def atualizar_tela_historico(self):
+
+        # todo: acertar de print para mostrar algo
+        checked_items = []
+        for index in range(self.tela_historico_listWidget.count()):
+            if self.tela_historico_listWidget.item(index).checkState() == Qt.Checked:
+                checked_items.append(self.tela_historico_listWidget.item(index).text())
+        print(checked_items)
+        string_formatada = "[PLACEHOLDER FOR IMG]\n"
+        for i in checked_items:
+            key = i.split(sep=" ")[0]
+            string_formatada += "{}\n".format(key)
+        string_formatada += "[PLACEHOLDER FOR IMG]"
+
+        # Texto em baixo da lista
+        self.tela_historico_label_figura.setText(string_formatada)
+        if not len(self.tela_historico_listWidget.selectedItems()) == 0:
+            item = self.tela_historico_listWidget.selectedItems()[0]
+            key = item.text().split(sep=" ")[0]
+            dict_resultados = self.historico.buscar_historico()
+            string_formatada = formatar_resultado(dict_resultados[key])
+            self.tela_historico_textBrowser.setText(string_formatada)
+
+    def limpar_selecao(self):
+        for index in range(self.tela_historico_listWidget.count()):
+            self.tela_historico_listWidget.item(index).setCheckState(QtCore.Qt.Unchecked)
 
     def mudar_tela_config(self):
         print("UI -> tela config")
@@ -411,7 +474,8 @@ class Ui_Form(object):
 
     def reconhecer(self):
         print("UI -> BACKEND processar_lista(lista de amostras)")
-        lista_de_amostras = []
+
+        # Se nada selecionado
         if self.tela_reco_listWidget.count() == 0:
             print("Lista vazia")
             msg = QMessageBox()
@@ -420,33 +484,69 @@ class Ui_Form(object):
             msg.setIcon(QMessageBox.Warning)
             x = msg.exec_()
             print(x)
+
+        # Se tem alguma amostra
         else:
+
+            # Tirar da listWidget  e colocar numa list
+            lista_de_amostras = []
             while self.tela_reco_listWidget.count() > 0:
                 lista_de_amostras.append(self.tela_reco_listWidget.takeItem(0).text())
+
+            # Processar lista
             self.pop_up = QtWidgets.QWidget()
             self.pop_up_ui = popup_progresso.Ui_Progresso()
             self.pop_up_ui.setupUi(self.pop_up)
             self.pop_up.show()
             self.pop_up.activateWindow()
-            self.thread = nosso_back_end.ThreadedProcessarLista(parent=None, amostras=lista_de_amostras)
+            self.thread = nosso_back_end.ThreadedProcessarLista(parent=None, amostras=lista_de_amostras, historico=self.historico)
             self.thread.progresso_total.connect(self.pop_up_ui.update_progresso_total)
             self.thread.progresso_parcial.connect(self.pop_up_ui.update_progresso_parcial)
-            self.thread.finished.connect(self.kill_pop_up)
+            self.thread.finished.connect(self.finished_rem)
             self.thread.start()
 
-    def kill_pop_up(self):
-        print('kill')
+            # Tratamento depende no numero de amostras
+            if len(lista_de_amostras) == 1:
+                # Se tiver só uma mostra, processa e vai para o resultado
+                self.proxima_tela = self.tela_resultado
+                print("UI -> RESULTADO")
+            else:
+                # Se tiver mais que uma mostra, vai para o historico com todos carregados
+                self.proxima_tela = self.tela_historico
+                print("UI -> HISTORICO")
+
+
+    def finished_rem(self):
+        print('finished_rem')
+        if self.proxima_tela == self.tela_resultado:
+            self.mudar_tela_resultado()
+        elif self.proxima_tela == self.tela_historico:
+            self.mudar_tela_historico()
         self.pop_up.close()
         self.pop_up.destroy()
 
-    def salvar_resultado_atual_no_historico(self):
-        raise NotImplementedError()
-
     def exportar_historico(self):
-        raise NotImplementedError()
+        file_filter = 'JSON File (*.json)'
+        response = QtWidgets.QFileDialog.getSaveFileName(
+            caption='Select a json file',
+            directory=os.path.join(os.getcwd()),
+            filter=file_filter,
+            initialFilter=file_filter
+        )
+        if response:
+            self.historico.exportar(response[0])
 
     def importar_historico(self):
-        raise NotImplementedError()
+        file_filter = 'JSON File (*.json)'
+        response = QtWidgets.QFileDialog.getOpenFileName(
+            caption='Select a json file',
+            directory=os.path.join(os.getcwd()),
+            filter=file_filter,
+            initialFilter=file_filter
+        )
+        if response:
+            self.historico.importar(response[0])
+            self.mudar_tela_historico()
 
     def salvar_configuracoes(self):
         raise NotImplementedError()

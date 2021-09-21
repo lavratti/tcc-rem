@@ -4,7 +4,6 @@ import time
 import matplotlib
 matplotlib.use('Agg') # No pictures displayed
 import pylab
-import librosa
 import librosa.display
 import numpy as np
 from PyQt5.QtCore import QThread, pyqtSignal
@@ -14,7 +13,7 @@ def gerar_espectograma(amostra):
     print("Gerando espec. para {}".format(amostra))
     matplotlib.use('Agg') # No pictures displayed
     sig, fs = librosa.load(amostra)
-    save_path = os.path.join('temp', '{}.jpg'.format(os.path.split(amostra)[1].split('.')[0]))
+    save_path = os.path.join('spectograms', '{}.jpg'.format(os.path.split(amostra)[1].split('.')[0]))
     pylab.axis('off') # no axis
     pylab.axes([0., 0., 1., 1.], frameon=False, xticks=[], yticks=[]) # Remove the white edge
     S = librosa.feature.melspectrogram(y=sig, sr=fs)
@@ -22,6 +21,7 @@ def gerar_espectograma(amostra):
     pylab.savefig(save_path, bbox_inches=None, pad_inches=0)
     pylab.close()
     print("Espec. OK")
+    return save_path
 
 
 class ThreadedProcessarLista(QThread):
@@ -29,11 +29,12 @@ class ThreadedProcessarLista(QThread):
     progresso_total = pyqtSignal(int)
     progresso_parcial = pyqtSignal(int)
 
-    def __init__(self, parent=None, amostras=None):
+    def __init__(self, parent=None, amostras=None, historico=None):
         super(ThreadedProcessarLista, self).__init__(parent)
-        if not amostras:
-            amostras = []
+        if not amostras or not historico:
+            raise ValueError
         self.amostras = amostras
+        self.historico = historico
         self.is_running = True
 
     def run(self):
@@ -43,19 +44,32 @@ class ThreadedProcessarLista(QThread):
 
         for amostra in self.amostras:
 
-            progresso_na_amostra = 0
-            self.progresso_parcial.emit(progresso_na_amostra)
-            gerar_espectograma(amostra)
-            progresso_na_amostra = 50
-            self.progresso_parcial.emit(progresso_na_amostra)
+            # Atualiza barra de progresso zerando amostra atual
+            self.progresso_parcial.emit(0)
 
-            for progresso_na_amostra in range(51,100):
-                self.progresso_parcial.emit(progresso_na_amostra+1)
-                time.sleep(0.002)
+            # Processamento inicial
+            resultado = processamento_basico_amostra(amostra)
+            resultado['spectogram'] = gerar_espectograma(amostra)
+            # TODO: Processamento maior + Atualiza barra de progresso
 
+            # Atualiza barra de progresso
+            self.progresso_parcial.emit(99)
+            self.historico.salvar_no_historico(resultado)
+
+            # Atualiza barra de progresso finalizando a amostra atual
             amostras_processadas += 1
-            progresso_na_lista = int(100 * (amostras_processadas / len(self.amostras)))
-            self.progresso_total.emit(progresso_na_lista)
+            self.progresso_parcial.emit(100)
+            self.progresso_total.emit(int(100 * (amostras_processadas / len(self.amostras))))
 
+        # Finalizou de processar a lista
         self.progresso_total.emit(100)
         self.is_running = False
+
+
+def processamento_basico_amostra(amostra):
+    propriedades = {'arquivo': amostra}
+    y, sr = librosa.load(amostra)
+    onset_env = librosa.onset.onset_strength(y, sr=sr)
+    propriedades['bpm'] = librosa.beat.tempo(onset_envelope=onset_env, sr=sr)[0]
+    return propriedades
+

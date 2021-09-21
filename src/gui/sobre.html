@@ -1,0 +1,768 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=Generator content="Microsoft Word 15 (filtered)">
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:Courier;
+	panose-1:2 7 4 9 2 2 5 2 4 4;}
+@font-face
+	{font-family:Wingdings;
+	panose-1:5 0 0 0 0 0 0 0 0 0;}
+@font-face
+	{font-family:SimSun;
+	panose-1:2 1 6 0 3 1 1 1 1 1;}
+@font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:Calibri;
+	panose-1:2 15 5 2 2 2 4 3 2 4;}
+@font-face
+	{font-family:Consolas;
+	panose-1:2 11 6 9 2 2 4 3 2 4;}
+@font-face
+	{font-family:"\@SimSun";
+	panose-1:2 1 6 0 3 1 1 1 1 1;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:8.0pt;
+	margin-left:0cm;
+	line-height:106%;
+	font-size:11.0pt;
+	font-family:"Calibri",sans-serif;}
+span.IEEEAbstractHeadingChar
+	{mso-style-name:"IEEE Abstract Heading Char";
+	mso-style-link:"IEEE Abstract Heading";
+	font-family:"Times New Roman",serif;
+	font-weight:bold;
+	font-style:italic;}
+p.IEEEAbstractHeading, li.IEEEAbstractHeading, div.IEEEAbstractHeading
+	{mso-style-name:"IEEE Abstract Heading";
+	mso-style-link:"IEEE Abstract Heading Char";
+	margin:0cm;
+	text-align:justify;
+	layout-grid-mode:char;
+	font-size:9.0pt;
+	font-family:"Times New Roman",serif;
+	font-weight:bold;
+	font-style:italic;}
+span.IEEEAbtractChar
+	{mso-style-name:"IEEE Abtract Char";
+	mso-style-link:"IEEE Abtract";
+	font-family:"Times New Roman",serif;
+	font-weight:bold;}
+p.IEEEAbtract, li.IEEEAbtract, div.IEEEAbtract
+	{mso-style-name:"IEEE Abtract";
+	mso-style-link:"IEEE Abtract Char";
+	margin:0cm;
+	text-align:justify;
+	layout-grid-mode:char;
+	font-size:9.0pt;
+	font-family:"Times New Roman",serif;
+	font-weight:bold;}
+p.IEEEAuthorAffiliation, li.IEEEAuthorAffiliation, div.IEEEAuthorAffiliation
+	{mso-style-name:"IEEE Author Affiliation";
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:3.0pt;
+	margin-left:0cm;
+	text-align:center;
+	font-size:10.0pt;
+	font-family:"Times New Roman",serif;
+	font-style:italic;}
+p.IEEEAuthorEmail, li.IEEEAuthorEmail, div.IEEEAuthorEmail
+	{mso-style-name:"IEEE Author Email";
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:3.0pt;
+	margin-left:0cm;
+	text-align:center;
+	font-size:9.0pt;
+	font-family:Courier;}
+p.IEEEAuthorName, li.IEEEAuthorName, div.IEEEAuthorName
+	{mso-style-name:"IEEE Author Name";
+	margin-top:6.0pt;
+	margin-right:0cm;
+	margin-bottom:6.0pt;
+	margin-left:0cm;
+	text-align:center;
+	layout-grid-mode:char;
+	font-size:11.0pt;
+	font-family:"Times New Roman",serif;}
+p.IEEEFigureCaptionSingle-Line, li.IEEEFigureCaptionSingle-Line, div.IEEEFigureCaptionSingle-Line
+	{mso-style-name:"IEEE Figure Caption Single-Line";
+	margin-top:6.0pt;
+	margin-right:0cm;
+	margin-bottom:6.0pt;
+	margin-left:0cm;
+	text-align:center;
+	font-size:8.0pt;
+	font-family:"Times New Roman",serif;}
+p.IEEEHeading1, li.IEEEHeading1, div.IEEEHeading1
+	{mso-style-name:"IEEE Heading 1";
+	margin-top:9.0pt;
+	margin-right:0cm;
+	margin-bottom:3.0pt;
+	margin-left:0cm;
+	text-align:center;
+	layout-grid-mode:char;
+	font-size:10.0pt;
+	font-family:"Times New Roman",serif;
+	font-variant:small-caps;}
+p.IEEEHeading2, li.IEEEHeading2, div.IEEEHeading2
+	{mso-style-name:"IEEE Heading 2";
+	margin-top:7.5pt;
+	margin-right:0cm;
+	margin-bottom:3.0pt;
+	margin-left:0cm;
+	layout-grid-mode:char;
+	font-size:10.0pt;
+	font-family:"Times New Roman",serif;
+	font-style:italic;}
+span.IEEEParagraphChar
+	{mso-style-name:"IEEE Paragraph Char";
+	mso-style-link:"IEEE Paragraph";
+	font-family:"Times New Roman",serif;}
+p.IEEEParagraph, li.IEEEParagraph, div.IEEEParagraph
+	{mso-style-name:"IEEE Paragraph";
+	mso-style-link:"IEEE Paragraph Char";
+	margin:0cm;
+	text-align:justify;
+	text-indent:10.8pt;
+	layout-grid-mode:char;
+	font-size:10.0pt;
+	font-family:"Times New Roman",serif;}
+p.IEEETitle, li.IEEETitle, div.IEEETitle
+	{mso-style-name:"IEEE Title";
+	margin:0cm;
+	text-align:center;
+	layout-grid-mode:char;
+	font-size:24.0pt;
+	font-family:"Times New Roman",serif;}
+.MsoChpDefault
+	{font-size:10.0pt;
+	font-family:"Calibri",sans-serif;}
+@page WordSection1
+	{size:595.3pt 841.9pt;
+	margin:72.0pt 54.0pt 72.0pt 54.0pt;}
+div.WordSection1
+	{page:WordSection1;}
+@page WordSection2
+	{size:595.3pt 841.9pt;
+	margin:70.85pt 3.0cm 70.85pt 3.0cm;}
+div.WordSection2
+	{page:WordSection2;}
+ /* List Definitions */
+ ol
+	{margin-bottom:0cm;}
+ul
+	{margin-bottom:0cm;}
+-->
+</style>
+
+</head>
+
+<body lang=PT-BR link="#0563C1" vlink="#954F72" style='word-wrap:break-word'>
+
+<div class=WordSection1>
+
+<p class=IEEETitle style='margin-right:758.55pt'><b><span style='font-size:
+18.0pt;font-family:"Arial",sans-serif'>CLASSIFICAÇÃO DE EMOÇÕES EM MÚSICAS
+UTILIZANDO APRENDIZADO DE MÁQUINA.</span></b></p>
+
+<p class=IEEEAuthorName style='margin-right:758.55pt'><span style='font-size:
+12.0pt;font-family:"Arial",sans-serif'>Lucas Lavratti<sup>#1</sup>, Rafael B.
+G. Bueno<sup>#2</sup>, Prof. Dr. Alceu S. Britto<sup>#*3</sup></span></p>
+
+<p class=IEEEAuthorAffiliation style='margin-right:758.55pt'><sup><span
+style='font-size:12.0pt;font-family:"Arial",sans-serif'>#</span></sup><span
+style='font-size:12.0pt;font-family:"Arial",sans-serif'>Escola Politécnica,
+Pontifícia Universidade Católica do Paraná</span></p>
+
+<p class=IEEEAuthorAffiliation style='margin-right:758.55pt'><span
+style='font-size:12.0pt;font-family:"Arial",sans-serif'>Rua Imaculada.
+Conceição, 1155, Curitiba, PR, 80215-901, Brasil</span></p>
+
+<p class=IEEEAuthorAffiliation style='margin-right:758.55pt'><sup><span
+style='font-size:12.0pt;font-family:"Arial",sans-serif'>*</span></sup><span
+style='font-size:12.0pt;font-family:"Arial",sans-serif'>PPGIa - Programa de
+Pós-Graduação em Informática</span></p>
+
+<p class=IEEEAuthorEmail style='margin-right:758.55pt'><sup><span
+style='font-size:12.0pt;font-family:"Arial",sans-serif'>1</span></sup><span
+style='font-size:12.0pt;font-family:"Arial",sans-serif'>lucas.lavratti@pucpr.edu.br</span></p>
+
+<p class=IEEEAuthorEmail style='margin-right:758.55pt'><sup><span
+style='font-size:12.0pt;font-family:"Arial",sans-serif'>2</span></sup><span
+style='font-size:12.0pt;font-family:"Arial",sans-serif'>rafael.gradowski@pucpr.edu.br</span></p>
+
+<p class=IEEEAuthorEmail style='margin-right:758.55pt'><sup><span
+style='font-size:12.0pt;font-family:"Arial",sans-serif'>3</span></sup><span
+style='font-size:12.0pt;font-family:"Arial",sans-serif'>alceu@ppgia.pucpr.br</span></p>
+
+<p class=IEEEAuthorAffiliation style='margin-right:758.55pt;text-align:justify'><span
+style='font-size:12.0pt;font-family:"Arial",sans-serif'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-right:758.55pt;text-align:justify'><span
+style='font-size:12.0pt;line-height:106%;font-family:"Arial",sans-serif'>&nbsp;</span></p>
+
+</div>
+
+<span style='font-size:12.0pt;line-height:106%;font-family:"Arial",sans-serif'><br
+clear=all style='page-break-before:always'>
+</span>
+
+<div class=WordSection2>
+
+<p class=IEEEAbstractHeading style='margin-right:758.55pt'><span
+style='font-size:12.0pt;font-family:"Arial",sans-serif'>Resumo: A música está
+presente na sociedade há milhares de anos e um de seus componentes principais é
+a emoção. Entretanto, o reconhecimento de emoções em músicas é um problema de
+alta complexidade e cercado de subjetividade. Esta tarefa é considerada um
+desafio computacional por muitos e é encarada pela literatura como um campo
+extenso e que apesar de resultados iniciais interessante, ainda necessita de
+pesquisas. Neste projeto será desenvolvido uma solução em software que utiliza técnicas
+modernas de aprendizado de máquina segundo a abordagem CRNN para o
+reconhecimento de emoções em músicas. Este software tem como proposta a
+aproximação do público musicista ou interessado com as tecnologias utilizadas
+por acadêmicos, uma vez que existe uma curva de aprendizado intimidadora para
+muitos membros da comunidade. </span></p>
+
+<p class=IEEEAbtract style='margin-right:758.55pt'><span style='font-size:12.0pt;
+font-family:"Arial",sans-serif'>&nbsp;</span></p>
+
+<p class=IEEEAbtract style='margin-right:758.55pt'><span style='font-size:12.0pt;
+font-family:"Arial",sans-serif'>Palavras-chave – Aprendizado de máquina,
+Aprendizado profundo, Redes Neurais Convolucionais recorrentes, Reconhecimento
+de emoções em músicas. </span></p>
+
+<p class=IEEEAbtract style='margin-right:758.55pt'><span lang=EN-US
+style='font-size:12.0pt;font-family:"Arial",sans-serif'>Key-words – Machine
+Learning, Deep Learning, Convolutional Recurrent Neural Networks, Music Emotion
+Recognition.</span></p>
+
+<p class=MsoNormal style='margin-right:758.55pt'><span lang=EN-US>&nbsp;</span></p>
+
+<p class=IEEEHeading1 style='margin-top:9.0pt;margin-right:758.55pt;margin-bottom:
+3.0pt;margin-left:14.4pt;text-indent:-14.4pt'><b><span style='font-size:12.0pt;
+font-family:"Arial",sans-serif;font-variant:normal !important;color:black;
+text-transform:uppercase'>1.<span style='font:7.0pt "Times New Roman"'>&nbsp; </span></span></b><b><span
+style='font-size:12.0pt;font-family:"Arial",sans-serif;font-variant:normal !important;
+text-transform:uppercase'>Introdução</span></b></p>
+
+<p class=MsoNormal style='margin-right:758.55pt'>&nbsp;</p>
+
+<p class=IEEEParagraph style='margin-right:758.55pt'><span style='font-size:
+12.0pt;font-family:"Arial",sans-serif'>A análise musical com o intuito de
+identificar o objetivo do artista é um problema multivariável uma vez que
+parâmetros como ritmo, notas e arranjos, duração e tempo, instrumentos, e
+outros fatores conversam de modo a produzir um conjunto complexo de dados a
+serem analisados. Diante disto nos questionamos de que forma seria possível que
+músicos teriam a certeza de que suas obras estão tendo o efeito desejado? O tema
+abordado neste projeto será o estudo e desenvolvimento de software baseados nas
+tecnologias apontadas pela literatura. Uma das tecnologias que podem ser
+utilizadas para auxiliar a identificação de emoções em música é a inteligência
+artificial, principalmente o aprendizado profundo, como demonstrado por
+(DELBOUYS et al., 2018).</span></p>
+
+<p class=IEEEParagraph style='margin-right:758.55pt'><span style='font-size:
+12.0pt;font-family:"Arial",sans-serif'>Este documento está separado nas
+seguintes seções: </span></p>
+
+<p class=IEEEParagraph style='margin-top:0cm;margin-right:758.55pt;margin-bottom:
+0cm;margin-left:42.55pt;margin-bottom:.0001pt;text-indent:-42.55pt'><span
+style='font-size:12.0pt;font-family:"Arial",sans-serif'><span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span>I.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp; </span></span><span
+style='font-size:12.0pt;font-family:"Arial",sans-serif'>Introdução; </span></p>
+
+<p class=IEEEParagraph style='margin-top:0cm;margin-right:758.55pt;margin-bottom:
+0cm;margin-left:42.55pt;margin-bottom:.0001pt;text-indent:-42.55pt'><span
+style='font-size:12.0pt;font-family:"Arial",sans-serif'><span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span>II.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp; </span></span><span
+style='font-size:12.0pt;font-family:"Arial",sans-serif'>Detalhamento do
+projeto; </span></p>
+
+<p class=IEEEParagraph style='margin-top:0cm;margin-right:758.55pt;margin-bottom:
+0cm;margin-left:42.55pt;margin-bottom:.0001pt;text-indent:-42.55pt'><span
+style='font-size:12.0pt;font-family:"Arial",sans-serif'><span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span>III.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp; </span></span><span
+style='font-size:12.0pt;font-family:"Arial",sans-serif'>Procedimentos de teste
+e validação do projeto; </span></p>
+
+<p class=IEEEParagraph style='margin-top:0cm;margin-right:758.55pt;margin-bottom:
+0cm;margin-left:42.55pt;margin-bottom:.0001pt;text-indent:0cm'><span
+style='font-size:12.0pt;font-family:"Arial",sans-serif'>&nbsp;</span></p>
+
+<p class=IEEEParagraph style='margin-top:0cm;margin-right:758.55pt;margin-bottom:
+0cm;margin-left:42.55pt;margin-bottom:.0001pt;text-indent:0cm'><span
+style='font-size:12.0pt;font-family:"Arial",sans-serif'>&nbsp;</span></p>
+
+<p class=IEEEHeading1 style='margin-top:0cm;margin-right:758.55pt;margin-bottom:
+3.0pt;margin-left:0cm'><i><span style='font-size:12.0pt;font-family:"Arial",sans-serif;
+font-variant:normal !important;text-transform:uppercase'>Detalhamento do
+Projeto</span></i></p>
+
+<p class=MsoNormal style='margin-right:758.55pt'>&nbsp;</p>
+
+<p class=MsoNormal style='margin-right:758.55pt;text-align:justify'><span
+style='font-size:12.0pt;line-height:106%;font-family:"Arial",sans-serif'>&nbsp;</span></p>
+
+<p class=IEEEParagraph style='margin-right:758.55pt'><span style='font-size:
+12.0pt;font-family:"Arial",sans-serif'>O projeto do sistema para reconhecimento
+de emoções em músicas tem como base duas etapas distintas em relação ao seu
+desenvolvimento. Inicialmente será realizado a concepção, treinamento e
+aperfeiçoamento da Rede Neural Convolucional Recorrente (CRNN) que fará a
+extração das informações de Valence e Arousal das amostras de interesse. Após
+este componente ter sido completo, será iniciado o desenvolvimento de uma
+interface e módulos auxiliares a utilização da rede CRNN feita na etapa
+anterior. Está ordem será obedecida uma vez que o processo de desenvolvimento
+da CRNN resulta em uma rede neural já treinada e não é interessante para o
+software final compreender a criação e treinamento destas redes, mas sim a
+utilização da tecnologia pelo usuário final. </span></p>
+
+<p class=IEEEParagraph style='margin-right:758.55pt'><span style='font-size:
+12.0pt;font-family:"Arial",sans-serif'>&nbsp;</span></p>
+
+<p class=IEEEHeading2 style='margin-right:758.55pt;text-align:justify'><b><span
+style='font-size:12.0pt;font-family:"Arial",sans-serif'>O que é uma CRNN?</span></b></p>
+
+<p class=IEEEParagraph style='margin-right:758.55pt'><span style='font-size:
+12.0pt;font-family:"Arial",sans-serif'>Para compreendermos o que é uma CRNN,
+primeiramente deve-se estabelecer alguns conceitos básicos de CNN e RNN.</span></p>
+
+<p class=IEEEParagraph style='margin-right:758.55pt'><span style='font-size:
+12.0pt;font-family:"Arial",sans-serif'>Uma CNN é uma rede neural artificial
+baseada na operação matemática de convolução entre os dados de entrada segundo
+um kernel – também chamado de janela – de tamanho pré-definido. A combinação de
+várias camadas de convolução é a característica predominante de CNNs. Essas
+redes neurais possuem grande capacidade de extração de features e são
+largamente utilizadas em tarefas de classificação.</span></p>
+
+<p class=IEEEParagraph style='margin-right:758.55pt'><span style='font-size:
+12.0pt;font-family:"Arial",sans-serif'>O funcionamento de uma RNN pode ser
+brevemente resumido, por sua vez, como uma rede neural que utiliza informações
+temporais durante o processamento dos dados de entrada. Existem diversas
+abordagens diferentes de RNN com diferentes filosofias de funcionamento, mas
+todas tem a temporalidade e recorrência dos dados de entrada como fatores
+importante na saída. No domínio da música este tipo de característica é muito
+proveitosa dado que a repetição, intervalos e tempo são intrínsecos a mídia em
+questão. </span></p>
+
+<p class=IEEEParagraph style='margin-right:758.55pt'><span style='font-size:
+12.0pt;font-family:"Arial",sans-serif'>A CRNN pode ser, então, descrita pela
+combinação das abordagens CNN e RNN, de maneira a possibilitar que a rede
+neural tenha a capacidade de extrair informações úteis e em diferentes escalas
+do conjunto de dados. Esta abordagem possibilita que o modelo compreenda de
+forma mais generalizada os componentes representativos das features nas
+músicas. </span></p>
+
+<p class=IEEEParagraph style='margin-right:758.55pt'><span style='font-size:
+12.0pt;font-family:"Arial",sans-serif'>A abordagem feita por </span><span
+style='font-size:12.0pt;font-family:"Arial",sans-serif'>(MALIK et al., 2017)</span><span
+style='font-size:12.0pt;font-family:"Arial",sans-serif'> pode ser usada como
+exemplo de maneiras adequadas de organizar o modelo e será utilizado como
+modelo inicial para a rede CRNN que será desenvolvida neste projeto.</span></p>
+
+<p class=IEEEParagraph style='margin-right:758.55pt'><span style='font-size:
+12.0pt;font-family:"Arial",sans-serif'>&nbsp;</span></p>
+
+<p class=IEEEParagraph style='margin-right:758.55pt'><span style='font-size:
+12.0pt;font-family:"Arial",sans-serif'>&nbsp;</span></p>
+
+<table class=MsoTableGrid border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse;border:none'>
+ <tr>
+  <td valign=top style='width:1382.1pt;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=IEEEParagraph align=center style='margin-top:0cm;margin-right:758.55pt;
+  margin-bottom:0cm;margin-left:5.75pt;margin-bottom:.0001pt;text-align:center;
+  text-indent:-5.75pt'><span style='font-size:12.0pt;font-family:"Arial",sans-serif'>Figura
+  1: Estrutura de rede neural convolucional recorrente proposta para extração
+  de emoções em músicas</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td valign=top style='width:1382.1pt;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=IEEEParagraph align=center style='margin-right:758.55pt;text-align:
+  center;text-indent:0cm'><span style='font-size:12.0pt;font-family:"Arial",sans-serif'><img
+   height=436 id="Imagem 24" src="sobre_arquivos/image002.jpg"></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td valign=top style='width:1382.1pt;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=IEEEParagraph align=center style='margin-right:758.55pt;text-align:
+  center;text-indent:0cm'><span style='font-size:12.0pt;font-family:"Arial",sans-serif'>Fonte:
+  </span><span
+  style='font-size:12.0pt;font-family:"Arial",sans-serif'>(MALIK et al., 2017)</span></p>
+  <p class=IEEEParagraph align=center style='margin-right:758.55pt;text-align:
+  center;text-indent:0cm'><span style='font-size:12.0pt;font-family:"Arial",sans-serif'>&nbsp;</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=IEEEParagraph style='margin-right:758.55pt;text-indent:0cm'><span
+style='font-size:12.0pt;font-family:"Arial",sans-serif'>&nbsp;</span></p>
+
+<p class=IEEEParagraph style='margin-right:758.55pt'><span style='font-size:
+12.0pt;font-family:"Arial",sans-serif'>O desenvolvimento da CRNN, seu
+treinamento e aperfeiçoamento será feito de forma exploratória a fim de compreender
+uma gama diversa de estruturas internas e parâmetros. </span></p>
+
+<p class=IEEEParagraph style='margin-right:758.55pt'><span style='font-size:
+12.0pt;font-family:"Arial",sans-serif'>O dataset que será utilizado para o
+treinamento e validação do modelo será o proposto por </span><span
+style='font-size:12.0pt;font-family:"Arial",sans-serif'>(SOLEYMANI et al.,
+2013)</span><span style='font-size:12.0pt;font-family:"Arial",sans-serif'>.
+Neste dataset estão classificados 1000 trechos de músicas com os devidos
+direitos de utilização. As amostras contidas neste banco foram manualmente
+classificadas por pelo menos 10 pessoas cada uma, eliminando ambiguidade e
+garantindo uma boa qualidade nos dados. </span></p>
+
+<p class=IEEEParagraph style='margin-right:758.55pt'><span style='font-size:
+12.0pt;font-family:"Arial",sans-serif'>A segunda fase de testes será feita com
+a assistência de especialistas na área (músicos e professores), que além de
+selecionarem outras músicas classificadas por eles, irão contribuir com a
+produção de pequenos samples de músicas em seguida classificados pelo programa.
+Cada um dos participantes recebera uma pequena previa de como são definidos os
+parâmetros de pesquisa e como os resultados serão apresentados.</span></p>
+
+<p class=IEEEParagraph style='margin-right:758.55pt'><span style='font-size:
+12.0pt;font-family:"Arial",sans-serif'>A estrutura resultante desta etapa será
+portada para o software final na forma treinada e otimizada. Já o
+desenvolvimento da interface se dará de forma a compatibilizar a CRNN em uma
+experiência positiva para o usuário. </span></p>
+
+<p class=IEEEParagraph style='margin-right:758.55pt'><span style='font-size:
+12.0pt;font-family:"Arial",sans-serif'>&nbsp;</span></p>
+
+<p class=IEEEHeading2 style='margin-right:758.55pt;text-align:justify'><b><span
+style='font-size:12.0pt;font-family:"Arial",sans-serif'>Especificações gerias
+do software</span></b></p>
+
+<p class=IEEEParagraph style='margin-right:758.55pt'><span style='font-size:
+12.0pt;font-family:"Arial",sans-serif'>O software final obedecerá às seguintes
+especificações: </span></p>
+
+<p class=IEEEParagraph style='margin-top:0cm;margin-right:758.55pt;margin-bottom:
+0cm;margin-left:1.0cm;margin-bottom:.0001pt;text-indent:-7.05pt'><span
+style='font-size:12.0pt;font-family:Symbol'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;
+</span></span><span style='font-size:12.0pt;font-family:"Arial",sans-serif'>Software
+portátil, de fácil instalação;</span></p>
+
+<p class=IEEEParagraph style='margin-top:0cm;margin-right:758.55pt;margin-bottom:
+0cm;margin-left:1.0cm;margin-bottom:.0001pt;text-indent:-7.05pt'><span
+style='font-size:12.0pt;font-family:Symbol'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;
+</span></span><span style='font-size:12.0pt;font-family:"Arial",sans-serif'>Interface
+gráfica;</span></p>
+
+<p class=IEEEParagraph style='margin-top:0cm;margin-right:758.55pt;margin-bottom:
+0cm;margin-left:1.0cm;margin-bottom:.0001pt;text-indent:-7.05pt'><span
+style='font-size:12.0pt;font-family:Symbol'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;
+</span></span><span style='font-size:12.0pt;font-family:"Arial",sans-serif'>Entrada
+de arquivos para classificação em formato de áudio (.mp3 ou .wav);</span></p>
+
+<p class=IEEEParagraph style='margin-top:0cm;margin-right:758.55pt;margin-bottom:
+0cm;margin-left:1.0cm;margin-bottom:.0001pt;text-indent:-7.05pt'><span
+style='font-size:12.0pt;font-family:Symbol'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;
+</span></span><span style='font-size:12.0pt;font-family:"Arial",sans-serif'>Extração
+de emoções em músicas (modo música individual ou múltiplas músicas) com
+resposta em espaço V-A;</span></p>
+
+<p class=IEEEParagraph style='margin-top:0cm;margin-right:758.55pt;margin-bottom:
+0cm;margin-left:1.0cm;margin-bottom:.0001pt;text-indent:-7.05pt'><span
+style='font-size:12.0pt;font-family:Symbol'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;
+</span></span><span style='font-size:12.0pt;font-family:"Arial",sans-serif'>Visualização
+textual e gráfica de dados extraídos;</span></p>
+
+<p class=IEEEParagraph style='margin-top:0cm;margin-right:758.55pt;margin-bottom:
+0cm;margin-left:1.0cm;margin-bottom:.0001pt;text-indent:-7.05pt'><span
+style='font-size:12.0pt;font-family:Symbol'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;
+</span></span><span style='font-size:12.0pt;font-family:"Arial",sans-serif'>Histórico
+de dados.</span></p>
+
+<p class=IEEEParagraph style='margin-right:758.55pt;text-indent:14.4pt'><span
+style='font-size:12.0pt;font-family:"Arial",sans-serif'>Estas especificações
+são descritas a seguir.</span></p>
+
+<p class=IEEEParagraph style='margin-right:758.55pt;text-indent:14.4pt'><span
+style='font-size:12.0pt;font-family:"Arial",sans-serif'>&nbsp;</span></p>
+
+<p class=IEEEHeading2 style='margin-right:758.55pt;text-align:justify'><b><span
+style='font-size:12.0pt;font-family:"Arial",sans-serif'>Portabilidade e
+instalador</span></b></p>
+
+<p class=IEEEParagraph style='margin-right:758.55pt'><span style='font-size:
+12.0pt;font-family:"Arial",sans-serif'>Devido à natureza do software, será
+necessário desenvolver um instalador para que o software instale as
+dependências necessárias para o seu funcionamento de maneira mais simplificada.
+A princípio, o objetivo é que o software possa ser executado após a instalação
+por parte do usuário apenas do interpretador Python e do nosso software, sem
+necessidade de baixar e instalar bibliotecas adicionais.</span></p>
+
+<p class=IEEEParagraph style='margin-right:758.55pt'><span style='font-size:
+12.0pt;font-family:"Arial",sans-serif'>&nbsp;</span></p>
+
+<p class=IEEEHeading2 style='margin-right:758.55pt;text-align:justify'><b><span
+style='font-size:12.0pt;font-family:"Arial",sans-serif'>Interface gráfica</span></b></p>
+
+<p class=IEEEParagraph style='margin-right:758.55pt'><span style='font-size:
+12.0pt;font-family:"Arial",sans-serif'>Como o intuito do projeto é aproximar do
+usuário final ferramentas complexas que normalmente necessitam de conhecimento
+técnico, é necessário que a fermenta seja fácil de ser utilizada pelo público
+em geral. A interface gráfica é mais amigável ao usuário do que alternativas
+utilizando apenas interfaces de linha de comando e por este motivo será
+utilizada para a interatividade do software. </span></p>
+
+<p class=IEEEParagraph style='margin-right:758.55pt'><span style='font-size:
+12.0pt;font-family:"Arial",sans-serif'>&nbsp;</span></p>
+
+<p class=IEEEHeading2 style='margin-right:758.55pt;text-align:justify'><b><span
+style='font-size:12.0pt;font-family:"Arial",sans-serif'>Entrada de arquivos</span></b></p>
+
+<p class=IEEEParagraph style='margin-right:758.55pt'><span style='font-size:
+12.0pt;font-family:"Arial",sans-serif'>A entrada de arquivos para a
+classificação deve funcionar de modo simples e eficiente. O projeto será
+inicialmente capaz de interpretar arquivos de áudio em formato mp3 uma vez que
+este é um formato padronizado e muito utilizado. Não será descartado a
+capacidade do programa interpretar outros formatos de arquivo, mas de forma
+secundária e não garantida (o usuário será avisado da possibilidade de falhas
+durante o uso de arquivos diferentes da especificação).</span></p>
+
+<p class=IEEEParagraph style='margin-right:758.55pt'><span style='font-size:
+12.0pt;font-family:"Arial",sans-serif'>&nbsp;</span></p>
+
+<p class=IEEEHeading2 style='margin-right:758.55pt;text-align:justify'><b><span
+style='font-size:12.0pt;font-family:"Arial",sans-serif'>Extração de emoções</span></b></p>
+
+<p class=IEEEParagraph style='margin-right:758.55pt'><span style='font-size:
+12.0pt;font-family:"Arial",sans-serif'>O componente de extração e emoções será
+a CRNN pré treinada durante a faze de desenvolvimento anterior e terá seu
+funcionamento análogo a uma caixa preta e produzindo o resultado em espaço V-A.
+</span></p>
+
+<p class=IEEEParagraph style='margin-right:758.55pt'><span style='font-size:
+12.0pt;font-family:"Arial",sans-serif'>Para utilização adequada dos algoritmos
+propostos é necessário aplicar pré processamentos nas amostras a fim de
+manuseá-las mais facilmente. Dois dos pré-processamentos fundamentais para a o
+funcionamento do programa será a segmentação da música em partes de tamanho
+variado (definido pelo usuário na tela de configurações) e a extração de um
+espectrograma de Mel – uma combinação de espectrogramas comuns com a escala de
+Mel, a fim de ser mais adequado a audição humana, como descrito por </span><span
+style='font-size:12.0pt;font-family:"Arial",sans-serif'>(GARTZMAN, 2020)</span><span
+style='font-size:12.0pt;font-family:"Arial",sans-serif'> – e será feito
+utilizando a biblioteca librosa como demonstrado pelos autores da biblioteca em
+sua documentação </span><span
+style='font-size:12.0pt;font-family:"Arial",sans-serif'>(MCFEE et al., 2020)</span><span
+style='font-size:12.0pt;font-family:"Arial",sans-serif'> e por </span><span
+style='font-size:12.0pt;font-family:"Arial",sans-serif'>(GARTZMAN, 2020)</span><span
+style='font-size:12.0pt;font-family:"Arial",sans-serif'>.</span></p>
+
+<p class=IEEEParagraph style='margin-right:758.55pt'><span style='font-size:
+12.0pt;font-family:"Arial",sans-serif'>&nbsp;</span></p>
+
+<p class=IEEEParagraph style='margin-right:758.55pt'><span style='font-size:
+12.0pt;font-family:"Arial",sans-serif'>&nbsp;</span></p>
+
+<table class=MsoTableGrid border=0 cellspacing=0 cellpadding=0
+ style='width:1403.35pt;border-collapse:collapse;border:none'>
+ <tr>
+  <td  valign=top style='width:1403.35pt;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=IEEEParagraph align=center style='margin-right:758.55pt;text-align:
+  center;text-indent:0cm'><span style='font-size:12.0pt;font-family:"Arial",sans-serif'>Figura
+  2: Espectrograma de Mel</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td  valign=top style='width:1403.35pt;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=IEEEParagraph align=center style='margin-top:0cm;margin-right:758.55pt;
+  margin-bottom:0cm;margin-left:5.5pt;margin-bottom:.0001pt;text-align:center;
+  text-indent:-5.5pt'><span style='font-size:12.0pt;font-family:"Arial",sans-serif'><img
+   height=364 id="Imagem 22" src="sobre_arquivos/image004.png"></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td  valign=top style='width:1403.35pt;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=IEEEParagraph align=center style='margin-right:758.55pt;text-align:
+  center;text-indent:0cm'><span style='font-size:12.0pt;font-family:"Arial",sans-serif'>Fonte:
+  </span><span
+  style='font-size:12.0pt;font-family:"Arial",sans-serif'>(GARTZMAN, 2020)</span></p>
+  <p class=IEEEParagraph align=center style='margin-right:758.55pt;text-align:
+  center;text-indent:0cm'><span style='font-size:12.0pt;font-family:"Arial",sans-serif'>&nbsp;</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=IEEEHeading2 style='margin-right:758.55pt;text-align:justify'><b><span
+style='font-size:12.0pt;font-family:"Arial",sans-serif;color:white'>Visualização
+de dados</span></b></p>
+
+<p class=IEEEParagraph style='margin-right:758.55pt'><span style='font-size:
+12.0pt;font-family:"Arial",sans-serif'>A visualização dos dados extraídos da
+música deve ser apresentada de maneira visual em um gráfico de espaço VA
+(valence-arousal space) com as devidas legendas e auxílios de interpretação. Em
+especial, nota-se que é necessário explicar o significado deste espaço para que
+o usuário possa interpretar corretamente o gráfico apresentado. </span></p>
+
+<p class=IEEEParagraph style='margin-right:758.55pt'><span style='font-size:
+12.0pt;font-family:"Arial",sans-serif'>O espaço VA é definido por um plano de
+coordenadas bidimensional com dois eixos, um horizontal e um vertical. O eixo
+horizontal corresponde ao atributo Valence (“ânimo”), e o eixo vertical ao
+atributo Arousal (“intensidade”). </span></p>
+
+<p class=IEEEParagraph style='margin-right:758.55pt'><span style='font-size:
+12.0pt;font-family:"Arial",sans-serif'>&nbsp;</span></p>
+
+<p class=IEEEParagraph style='margin-right:758.55pt'><span style='font-size:
+12.0pt;font-family:"Arial",sans-serif'>&nbsp;</span></p>
+
+<table class=MsoTableGrid border=0 cellspacing=0 cellpadding=0
+ style='width:1403.35pt;border-collapse:collapse;border:none'>
+ <tr>
+  <td valign=top style='width:1403.35pt;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=IEEEFigureCaptionSingle-Line style='margin-top:0cm;margin-right:
+  758.55pt;margin-bottom:6.0pt;margin-left:0cm'><span style='font-size:12.0pt;
+  font-family:"Arial",sans-serif'>Figura 2: Exemplos de emoções em espaço VA</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td valign=top style='width:1403.35pt;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=IEEEParagraph align=center style='margin-right:758.55pt;text-align:
+  center;text-indent:0cm'><span style='font-size:12.0pt;font-family:"Arial",sans-serif'><img
+   height=330 id="Imagem 3" src="sobre_arquivos/image006.jpg"
+  alt="Two-dimensional valence-arousal space. &nbsp;"></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td valign=top style='width:1403.35pt;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=IEEEFigureCaptionSingle-Line style='margin-top:0cm;margin-right:
+  758.55pt;margin-bottom:6.0pt;margin-left:0cm'><span style='font-size:12.0pt;
+  font-family:"Arial",sans-serif'>Fonte: </span><span
+  style='font-size:12.0pt;font-family:"Arial",sans-serif'>(YU et al., 2016)</span></p>
+  <p class=MsoNormal align=center style='margin-top:0cm;margin-right:758.55pt;
+  margin-bottom:0cm;margin-left:0cm;text-align:center;line-height:normal'><span
+  style='font-size:12.0pt;font-family:"Arial",sans-serif'>&nbsp;</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=IEEEParagraph style='margin-right:758.55pt'><span style='font-size:
+12.0pt;font-family:"Arial",sans-serif;color:white'>Como comentado pelo autor </span><span
+style='font-size:12.0pt;font-family:"Arial",sans-serif'>(BESTELMEYER; KOTZ;
+BELIN, 2017)</span><span style='font-size:12.0pt;font-family:"Arial",sans-serif'>,
+o “animo” está associada a positividade ou negatividade de uma experiência e a
+“intensidade” a quão forte é a reação a experiência. Uma das motivações para a
+criação deste instrumento é expressar as diferentes emoções como parte de um
+espectro contínuo, como proposto por </span><span
+style='font-size:12.0pt;font-family:"Arial",sans-serif'>(RUSSELL, 1980)</span><span
+style='font-size:12.0pt;font-family:"Arial",sans-serif'> e utilizado por </span><span
+style='font-size:12.0pt;font-family:"Arial",sans-serif'>(YU et al., 2016)</span><span
+style='font-size:12.0pt;font-family:"Arial",sans-serif'>, e não apenas emoções
+discretas.</span></p>
+
+<p class=IEEEParagraph style='margin-right:758.55pt'><span style='font-size:
+12.0pt;font-family:"Arial",sans-serif'>&nbsp;</span></p>
+
+<p class=IEEEHeading2 style='margin-right:758.55pt;text-align:justify'><b><span
+style='font-size:12.0pt;font-family:"Arial",sans-serif'>Histórico local</span></b></p>
+
+<p class=IEEEParagraph style='margin-right:758.55pt;text-indent:14.4pt'><span
+style='font-size:12.0pt;font-family:"Arial",sans-serif'>Uma funcionalidade que será
+entregue é a possibilidade de armazenar os dados de cada extração em um arquivo
+em formato .csv que poderá ser posteriormente visualizado pelo usuário tanto no
+software que estamos utilizando quando em outras aplicações de sua escolha
+(como Microsoft Excel ou Google planilhas)</span></p>
+
+<p class=IEEEParagraph style='margin-right:758.55pt;text-indent:14.4pt'><span
+style='font-size:12.0pt;font-family:"Arial",sans-serif'>&nbsp;</span></p>
+
+<p class=IEEEParagraph style='margin-right:758.55pt;text-indent:14.4pt'><span
+style='font-size:12.0pt;font-family:"Arial",sans-serif'>&nbsp;</span></p>
+
+<p class=IEEEParagraph style='margin-right:758.55pt;text-indent:14.4pt'><span
+style='font-size:12.0pt;font-family:"Arial",sans-serif'>&nbsp;</span></p>
+
+<p class=IEEEHeading1 style='margin-right:758.55pt'><i><span style='font-size:
+12.0pt;font-family:"Arial",sans-serif;font-variant:normal !important;
+text-transform:uppercase'>Procedimentos de teste e validação do projeto</span></i></p>
+
+<p class=MsoNormal style='margin-right:758.55pt'>&nbsp;</p>
+
+<p class=MsoNormal style='margin-right:758.55pt'>&nbsp;</p>
+
+<p class=IEEEParagraph style='margin-right:758.55pt'><span style='font-size:
+12.0pt;font-family:"Arial",sans-serif'>Os testes e validação do projeto serão
+divididos em duas partes: Experiência do usuário e acurácia do reconhecimento
+de emoções feita pelo software.</span></p>
+
+<p class=IEEEParagraph style='margin-right:758.55pt'><span style='font-size:
+12.0pt;font-family:"Arial",sans-serif'>&nbsp;</span></p>
+
+<p class=IEEEHeading2 style='margin-right:758.55pt;text-align:justify'><b><span
+style='font-size:12.0pt;font-family:"Arial",sans-serif'>A acurácia do
+reconhecimento de emoções</span></b></p>
+
+<p class=IEEEParagraph style='margin-right:758.55pt'><span style='font-size:
+12.0pt;font-family:"Arial",sans-serif'>Os testes e validações relativos ao
+reconhecimento de emoções será feito segundo os moldes propostos na literatura
+durante o <i>Emotion in Music Task at MediaEval 2015</i>¸uma vez que o
+algoritmo proposto se encaixa no âmbito proposto pelos organizadores </span><span
+style='font-size:12.0pt;font-family:"Arial",sans-serif'>(ALJANAKI; YANG;
+SOLEYMANI, 2015)</span><span style='font-size:12.0pt;font-family:"Arial",sans-serif'>.
+Estas avaliações qualitativas envolvem treinar e testar o sistema desenvolvido
+com um dataset pré-selecionado e disponibilizado pelos autores </span><span
+style='font-size:12.0pt;font-family:"Arial",sans-serif'>(SOLEYMANI et al.,
+2013)</span><span style='font-size:12.0pt;font-family:"Arial",sans-serif'>. Os
+parâmetros utilizados para a validação do modelo serão Arousal e Valence
+(Espaço V-A), avaliados pelo erro médio quadrático (Root Mean Square Erro, ou
+RMSE).</span></p>
+
+<p class=IEEEParagraph style='margin-right:758.55pt'><span style='font-size:
+12.0pt;font-family:"Arial",sans-serif'>&nbsp;</span></p>
+
+<p class=IEEEHeading2 style='margin-right:758.55pt;text-align:justify'><b><span
+style='font-size:12.0pt;font-family:"Arial",sans-serif'>A experiência do
+usuário</span></b></p>
+
+<p class=IEEEParagraph style='margin-right:758.55pt'><span style='font-size:
+12.0pt;font-family:"Arial",sans-serif'>A validação da experiência do usuário
+(UX) é de grande importância para compreender a maneira que o público alvo
+interage com a aplicação </span><span
+style='font-size:12.0pt;font-family:"Arial",sans-serif'>(RIIHIAHO, 2018)</span><span
+style='font-size:12.0pt;font-family:"Arial",sans-serif'>. Esta avaliação
+proporciona uma base para que o produto desenvolvido possa evoluir de maneira a
+agradar uma maior parcela dos usuários e agregar valor ao projeto como um todo.
+</span></p>
+
+<p class=IEEEParagraph style='margin-right:758.55pt'><span style='font-size:
+12.0pt;font-family:"Arial",sans-serif'>O método selecionado para a execução
+dessa etapa é a avaliação remota não moderada da experiencia de usuário. Este
+método de avaliação foi escolhido por sua proximidade com o ambiente real de
+utilização do software, naturalidade da interação do usuário, custo reduzido e
+boa escalabilidade. O contraponto deste método é a quantidade menor de detalhes
+em cada avaliação.  </span><span
+style='font-size:12.0pt;font-family:"Arial",sans-serif'>(BABICH, 2019)</span></p>
+
+<p class=IEEEParagraph style='margin-right:758.55pt'><span style='font-size:
+12.0pt;font-family:"Arial",sans-serif'>Para a validação será distribuído o
+software aos usuários voluntários para que possam experimentar com as
+funcionalidades disponíveis. Após a interação, o usuário deverá preencher um
+formulário de forma a avaliar sua experiência. Ao final do período de
+validação, os resultados obtidos serão analisados e propostas de melhorias
+serão apresentadas.</span></p>
+
+<p class=IEEEParagraph style='margin-right:758.55pt'><span style='font-size:
+12.0pt;font-family:"Arial",sans-serif'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-right:758.55pt;text-align:justify'><span
+style='font-size:12.0pt;line-height:106%;font-family:"Arial",sans-serif'>&nbsp;</span></p>
+
+</div>
+
+</body>
+
+</html>

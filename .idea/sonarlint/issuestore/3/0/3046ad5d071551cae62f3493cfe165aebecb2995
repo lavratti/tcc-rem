@@ -1,0 +1,56 @@
+
+jWeb:DoctypePresenceCheck":Insert a <!DOCTYPE> declaration to before this <html> tag.(œ÷Ãûÿÿÿÿ8º±üÓÀ/
+a	Web:S5254"@Add "lang" and/or "xml:lang" attributes to this "<html>" element(œ÷Ãûÿÿÿÿ8»±üÓÀ/
+JWeb:PageWithoutTitleCheck"Add a <title> tag to this page.(Õ¶¯M8úñ›ÔÀ/
+J	Web:S1827«"(Remove this deprecated "link" attribute.(¥´®ÿøÿÿÿÿ8úñ›ÔÀ/
+K	Web:S1827«")Remove this deprecated "vlink" attribute.(¥´®ÿøÿÿÿÿ8‰ò›ÔÀ/
+OWeb:BoldAndItalicTagsCheck¯"!Replace this <b> tag by <strong>.(à…¹ü8‰ò›ÔÀ/
+K	Web:S1827Ù")Remove this deprecated "clear" attribute.(å¶¹§øÿÿÿÿ8‰ò›ÔÀ/
+TWeb:BoldAndItalicTagsCheckı"!Replace this <b> tag by <strong>.(×ªàÓşÿÿÿÿ8‰ò›ÔÀ/
+TWeb:BoldAndItalicTagsCheckÿ"!Replace this <b> tag by <strong>.(ñ¹Ÿ±úÿÿÿÿ8‰ò›ÔÀ/
+KWeb:BoldAndItalicTagsCheck³"Replace this <i> tag by <em>.(ü®¤È8Šò›ÔÀ/
+OWeb:BoldAndItalicTagsCheckÌ"!Replace this <b> tag by <strong>.(õÚ¸Ô8Šò›ÔÀ/
+UWeb:TableWithoutCaptionCheckú" Add a description to this table.(±¦Öıÿÿÿÿ8Šò›ÔÀ/
+G	Web:S5256ú"%Add "<th>" headers to this "<table>".(±¦Öıÿÿÿÿ8Šò›ÔÀ/
+Q	Web:S1827ú"/Remove this deprecated "cellspacing" attribute.(±¦Öıÿÿÿÿ8Šò›ÔÀ/
+Q	Web:S1827ú"/Remove this deprecated "cellpadding" attribute.(±¦Öıÿÿÿÿ8Šò›ÔÀ/
+F	Web:S1827ı"*Remove this deprecated "valign" attribute.(ŒÄ¦u8Šò›ÔÀ/
+F	Web:S1827ş")Remove this deprecated "align" attribute.(àÆ«–8Šò›ÔÀ/
+F	Web:S1827†"*Remove this deprecated "valign" attribute.(ŒÄ¦u8‹ò›ÔÀ/
+K	Web:S1827‡")Remove this deprecated "align" attribute.(ã¢ËÔÿÿÿÿÿ8‹ò›ÔÀ/
+OWeb:ImgWithoutAltCheckˆ"%Add an "alt" attribute to this image.(«…şÃ8‹ò›ÔÀ/
+F	Web:S1827"*Remove this deprecated "valign" attribute.(ŒÄ¦u8‹ò›ÔÀ/
+K	Web:S1827")Remove this deprecated "align" attribute.(ã¢ËÔÿÿÿÿÿ8‹ò›ÔÀ/
+K	Web:S1827’")Remove this deprecated "align" attribute.(ã¢ËÔÿÿÿÿÿ8‹ò›ÔÀ/
+OWeb:BoldAndItalicTagsCheck»"!Replace this <b> tag by <strong>.(õÚ¸Ô8‹ò›ÔÀ/
+OWeb:BoldAndItalicTagsCheckï"!Replace this <b> tag by <strong>.(õÚ¸Ô8Œò›ÔÀ/
+OWeb:BoldAndItalicTagsCheckş"!Replace this <b> tag by <strong>.(õÚ¸Ô8Œò›ÔÀ/
+OWeb:BoldAndItalicTagsCheckŒ"!Replace this <b> tag by <strong>.(õÚ¸Ô8Œò›ÔÀ/
+OWeb:BoldAndItalicTagsCheck›"!Replace this <b> tag by <strong>.(õÚ¸Ô8Œò›ÔÀ/
+UWeb:TableWithoutCaptionCheck»" Add a description to this table.(±¦Öıÿÿÿÿ8Œò›ÔÀ/
+G	Web:S5256»"%Add "<th>" headers to this "<table>".(±¦Öıÿÿÿÿ8Œò›ÔÀ/
+Q	Web:S1827»"/Remove this deprecated "cellspacing" attribute.(±¦Öıÿÿÿÿ8Œò›ÔÀ/
+Q	Web:S1827»"/Remove this deprecated "cellpadding" attribute.(±¦Öıÿÿÿÿ8Œò›ÔÀ/
+G	Web:S1827¾"*Remove this deprecated "valign" attribute.(¶²°8Œò›ÔÀ/
+K	Web:S1827¿")Remove this deprecated "align" attribute.(ã¢ËÔÿÿÿÿÿ8ò›ÔÀ/
+G	Web:S1827Å"*Remove this deprecated "valign" attribute.(¶²°8ò›ÔÀ/
+F	Web:S1827Æ")Remove this deprecated "align" attribute.(àÆ«–8ò›ÔÀ/
+TWeb:ImgWithoutAltCheckÈ"%Add an "alt" attribute to this image.(¨¸óşûÿÿÿÿ8ò›ÔÀ/
+G	Web:S1827Í"*Remove this deprecated "valign" attribute.(¶²°8ò›ÔÀ/
+K	Web:S1827Î")Remove this deprecated "align" attribute.(ã¢ËÔÿÿÿÿÿ8™ò›ÔÀ/
+K	Web:S1827Ò")Remove this deprecated "align" attribute.(ã¢ËÔÿÿÿÿÿ8™ò›ÔÀ/
+OWeb:BoldAndItalicTagsCheckØ"!Replace this <b> tag by <strong>.(õÚ¸Ô8™ò›ÔÀ/
+UWeb:TableWithoutCaptionCheckï" Add a description to this table.(±¦Öıÿÿÿÿ8™ò›ÔÀ/
+G	Web:S5256ï"%Add "<th>" headers to this "<table>".(±¦Öıÿÿÿÿ8™ò›ÔÀ/
+Q	Web:S1827ï"/Remove this deprecated "cellspacing" attribute.(±¦Öıÿÿÿÿ8™ò›ÔÀ/
+Q	Web:S1827ï"/Remove this deprecated "cellpadding" attribute.(±¦Öıÿÿÿÿ8™ò›ÔÀ/
+G	Web:S1827ò"*Remove this deprecated "valign" attribute.(¶²°8™ò›ÔÀ/
+G	Web:S1827ù"*Remove this deprecated "valign" attribute.(¶²°8™ò›ÔÀ/
+K	Web:S1827ú")Remove this deprecated "align" attribute.(ã¢ËÔÿÿÿÿÿ8™ò›ÔÀ/
+G	Web:S1827"*Remove this deprecated "valign" attribute.(¶²°8™ò›ÔÀ/
+E	Web:S1827†")Remove this deprecated "align" attribute.(…µæ8™ò›ÔÀ/
+OWeb:BoldAndItalicTagsCheck"!Replace this <b> tag by <strong>.(õÚ¸Ô8šò›ÔÀ/
+PWeb:BoldAndItalicTagsCheck±"Replace this <i> tag by <em>.(ÁÕ–Àüÿÿÿÿ8šò›ÔÀ/
+OWeb:BoldAndItalicTagsCheckÁ"!Replace this <b> tag by <strong>.(õÚ¸Ô8šò›ÔÀ/
+KWeb:BoldAndItalicTagsCheckÈ"Replace this <i> tag by <em>.(ËÑæâ8šò›ÔÀ/
+OWeb:BoldAndItalicTagsCheck×"!Replace this <b> tag by <strong>.(õÚ¸Ô8šò›ÔÀ/

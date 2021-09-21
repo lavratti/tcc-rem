@@ -19,6 +19,7 @@ from PyQt5.QtWidgets import QMessageBox, QListWidgetItem
 
 from src import nosso_back_end, handler_historico
 
+#foi?
 
 def formatar_resultado(dict_resultado):
     s = ""

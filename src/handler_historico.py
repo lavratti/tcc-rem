@@ -21,7 +21,10 @@ class Historico:
         resultado['arquivo'] = os.path.basename(resultado['arquivo'])
         with open(self.arquivo, "r") as fp:
             historico = json.load(fp)
-        prox_id = int(sorted(self.buscar_historico(), key=int)[-1])+1
+        if len(historico) == 0:
+            prox_id = 1
+        else:
+            prox_id = int(sorted(self.buscar_historico(), key=int)[-1])+1
         historico[prox_id] = resultado
         with open(self.arquivo, 'w+') as fp:
             json.dump(historico, fp, indent=4)

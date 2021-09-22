@@ -1,1 +1,12 @@
-Vamos usar o git de maneira bem básica, tudo no master por enquanto.
+Resumo: A música está presente na sociedade há milhares de anos e um de seus componentes principais é a emoção. Entretanto, o reconhecimento de emoções em músicas é um problema de alta complexidade e cercado de subjetividade. Esta tarefa é considerada um desafio computacional por muitos e é encarada pela literatura como um campo extenso e que apesar de resultados iniciais interessante, ainda necessita de pesquisas. Neste projeto será desenvolvido uma solução em software que utiliza técnicas modernas de aprendizado de máquina segundo a abordagem CRNN para o reconhecimento de emoções em músicas. Este software tem como proposta a aproximação do público musicista ou interessado com as tecnologias utilizadas por acadêmicos, uma vez que existe uma curva de aprendizado intimidadora para muitos membros da comunidade.
+
+Palavras-chave – Aprendizado de máquina, Aprendizado profundo, Redes Neurais Convolucionais recorrentes, Reconhecimento de emoções em músicas.
+Key-words – Machine Learning, Deep Learning, Convolutional Recurrent Neural Networks, Music Emotion Recognition. 
+
+I. INTRODUÇÃO 
+
+A análise musical com o intuito de identificar o objetivo do artista é um problema multivariável uma vez que parâmetros como ritmo, notas e arranjos, duração e tempo, instrumentos, e outros fatores conversam de modo a produzir um conjunto complexo de dados a serem analisados. Diante disto nos questionamos de que forma seria possível que músicos teriam a certeza de que suas obras estão tendo o efeito desejado? O tema abordado neste projeto será o estudo e desenvolvimento de software baseados nas tecnologias apontadas pela literatura. Uma das tecnologias que podem ser utilizadas para auxiliar a identificação de emoções em música é a inteligência artificial, principalmente o aprendizado profundo, como demonstrado por (DELBOUYS et al., 2018). 
+
+II. DETALHAMENTO DO PROJETO 
+
+O projeto do sistema para reconhecimento de emoções em músicas tem como base duas etapas distintas em relação ao seu desenvolvimento. Inicialmente será realizado a concepção, treinamento e aperfeiçoamento da Rede Neural Convolucional Recorrente (CRNN) que fará a extração das informações de Valence e Arousal das amostras de interesse. Após este componente ter sido completo, será iniciado o desenvolvimento de uma interface e módulos auxiliares a utilização da rede CRNN feita na etapa anterior. Está ordem será obedecida uma vez que o processo de desenvolvimento da CRNN resulta em uma rede neural já treinada e não é interessante para o software final compreender a criação e treinamento destas redes, mas sim a utilização da tecnologia pelo usuário final.

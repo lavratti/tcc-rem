@@ -9,7 +9,22 @@ import pandas as pd
 import src.handler_historico as handler_historico
 import src.nosso_back_end as nosso_back_end
 
+#serviço de Log
+import logging
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+fmt = logging.Formatter('%(asctime)s | %(name)s | %(levelname)s | %(message)s')
+ch = logging.StreamHandler()
+ch.setLevel(logging.DEBUG)
+ch.setFormatter(fmt)
+logger.addHandler(ch)
+fh = logging.FileHandler(os.path.join("..", "rem.log"))
+fh.setLevel(logging.INFO)
+fh.setFormatter(fmt)
+logger.addHandler(fh)
 
+# add ch to logger
+logger.addHandler(ch)
 class Ui_Form(object):
 
     def __init__(self, Form):
@@ -322,13 +337,13 @@ class Ui_Form(object):
 
     def mudar_tela_reconhecer(self):
         # Muda a tela para a tela "reconhecer"
-        print("UI -> tela reconhecer")
+        logger.debug("UI -> tela reconhecer")
         index = self.stackedWidget.indexOf(self.tela_reco)
         self.stackedWidget.setCurrentIndex(index)
 
     def mudar_tela_resultado(self):
         # Muda a tela para a tela "resultado"
-        print("UI -> tela resultado")
+        logger.debug("UI -> tela resultado")
         dict_resultado = self.historico.buscar_ultimo()
         string_formatada = formatar_resultado(dict_resultado)
         self.tela_resultado_textBrowser.setText(string_formatada)
@@ -339,7 +354,7 @@ class Ui_Form(object):
 
     def mudar_tela_historico(self):
         # Muda a tela para a tela "historico"
-        print("UI -> tela historico")
+        logger.debug("UI -> tela historico")
         index = self.stackedWidget.indexOf(self.tela_historico)
         self.tela_historico_listWidget.clear()
         dict_resultados = self.historico.buscar_historico()
@@ -356,11 +371,12 @@ class Ui_Form(object):
     def atualizar_tela_historico(self):
         # Atualiza a tela historico com os itens corretos e a imagem adequada"
         # todo acertar de print para mostrar algo
+        logger.debug("Atualizando a tela histórico")
         checked_items = []
         for index in range(self.tela_historico_listWidget.count()):
             if self.tela_historico_listWidget.item(index).checkState() == Qt.Checked:
                 checked_items.append(self.tela_historico_listWidget.item(index).text())
-        print(checked_items)
+        logger.debug(checked_items)
         string_formatada = "[PLACEHOLDER FOR IMG]\n"
         for i in checked_items:
             key = i.split(sep=" ")[0]
@@ -378,30 +394,31 @@ class Ui_Form(object):
 
     def limpar_selecao(self):
         # limpa a selecao na tela historico
+        logger.debug("Limpando seleção tela histórico")
         for index in range(self.tela_historico_listWidget.count()):
             self.tela_historico_listWidget.item(index).setCheckState(QtCore.Qt.Unchecked)
 
     def mudar_tela_config(self):
         # Muda a tela para a tela de configurações
-        print("UI -> tela config")
+        logger.debug("UI -> tela config")
         index = self.stackedWidget.indexOf(self.tela_configs)
         self.stackedWidget.setCurrentIndex(index)
 
     def mudar_tela_sobre(self):
         # Muda a tela para a tela "sobre"
-        print("UI -> tela sobre")
+        logger.debug("UI -> tela sobre")
         index = self.stackedWidget.indexOf(self.tela_sobre)
         self.stackedWidget.setCurrentIndex(index)
 
     def mudar_tela_inicial(self):
         # Muda a tela para a tela "inicial"
-        print("UI -> tela inicial")
+        logger.debug("UI -> tela inicial")
         index = self.stackedWidget.indexOf(self.tela_inicial)
         self.stackedWidget.setCurrentIndex(index)
 
     def dialogo_adcionar_amostra(self):
         # Abre um diálogo de inserção de arquivos para adicionar amostras a lista de amostras pendentes
-        print("UI -> Add amostras")
+        logger.debug("UI -> Add amostras")
         file_filter = 'Audio File (*.wav)'
         response = QtWidgets.QFileDialog.getOpenFileNames(
             caption='Select a data file',
@@ -417,72 +434,84 @@ class Ui_Form(object):
                     to_remove.append(lrow)
             for row in to_remove:
                 self.tela_reco_listWidget.takeItem(row)
-            print("UI -> Amostra  {} adcionada a lista".format(response[0]))
+            logger.debug("UI -> Amostra  {} adcionada a lista".format(response[0]))
             self.tela_reco_listWidget.addItem(arquivo)
 
     def remover_amostra(self, item):
         # Remove uma amostra da lista de amostras pendentes
-        print("UI -> Remover amostra")
+        logger.debug("UI -> Remover amostra")
         self.tela_reco_listWidget.takeItem(self.tela_reco_listWidget.row(item))
-        print("UI -> Amostra  removida")
+        logger.debug("UI -> Amostra  removida")
 
     def reconhecer(self):
         # Aciona o motor do backend para reconhecer a(s) amostra(s) na lista de amostras pendentes
-        print("UI -> BACKEND processar_lista(lista de amostras)")
+        logger.debug("UI -> BACKEND processar_lista(lista de amostras)")
 
-        # Se nada selecionado
+        # Senão houver nenhuma amostra na lista de pendentes, avisar o usuário com um pop-up e voltar a tela de seleção
         if self.tela_reco_listWidget.count() == 0:
-            print("Lista vazia")
+            logger.debug("Lista vazia")
             msg = QMessageBox()
             msg.setWindowTitle("CRNN-REM - Erro!")
             msg.setText("A lista está vazia! Selecione pelo menos uma amostra para prosseguir.")
             msg.setIcon(QMessageBox.Warning)
             x = msg.exec_()
-            print(x)
+            logger.debug(x)
 
-        # Se tem alguma amostra
+        # Se houver alguma amostra, tratar
         else:
-
-            # Tirar da listWidget  e colocar numa list
+            # Para tratar melhor, tiramos da listWidget e colocamos numa lista comum
             lista_de_amostras = []
             while self.tela_reco_listWidget.count() > 0:
                 lista_de_amostras.append(self.tela_reco_listWidget.takeItem(0).text())
+            # Com a lista normal em mãos, devemos processar a lista
 
-            # Processar lista
+            # A escolha da próxima tela depende no numero de amostras
+            if len(lista_de_amostras) == 1:
+                # Se tiver só uma mostra, processa e vai para o resultado individual
+                self.proxima_tela = self.tela_resultado
+                logger.debug("UI -> RESULTADO")
+            else:
+                # Se tiver mais que uma mostra, vamos para o historico com todos os reconhecimentos carregados
+                self.proxima_tela = self.tela_historico
+                logger.debug("UI -> HISTORICO")
+
+            # Abrimos uma janela pop-up com barras de progresso para o usuário entender que o programa não congelou,
+            # mas sim está ocupado processando as amostras da lista
             self.pop_up = QtWidgets.QWidget()
             self.pop_up_ui = popup_progresso.Ui_Progresso()
             self.pop_up_ui.setupUi(self.pop_up)
             self.pop_up.show()
             self.pop_up.activateWindow()
-            self.thread = nosso_back_end.ThreadedProcessarLista(parent=None, amostras=lista_de_amostras, historico=self.historico)
+
+            # Então prosseguimos para criar uma thread de processamento
+            self.thread = nosso_back_end.ThreadedProcessarLista(parent=None,
+                                                                amostras=lista_de_amostras,
+                                                                historico=self.historico)
+
+            # Connectamos a thread a algumas funções para atualizar a GUI conforme o andamento e sinalizar o término
             self.thread.progresso_total.connect(self.pop_up_ui.update_progresso_total)
             self.thread.progresso_parcial.connect(self.pop_up_ui.update_progresso_parcial)
             self.thread.finished.connect(self.finished_rem)
+
+            # Com tudo preparado, iniciamos a thread e aguardamos a chamada apos finalizado
+            logger.info('Thread de processamento iniciada')
             self.thread.start()
-
-            # Tratamento depende no numero de amostras
-            if len(lista_de_amostras) == 1:
-                # Se tiver só uma mostra, processa e vai para o resultado
-                self.proxima_tela = self.tela_resultado
-                print("UI -> RESULTADO")
-            else:
-                # Se tiver mais que uma mostra, vai para o historico com todos carregados
-                self.proxima_tela = self.tela_historico
-                print("UI -> HISTORICO")
-
 
     def finished_rem(self):
         # Função chamada após o término da tarefa de reconhecimento feita pelo back-end
-        print('finished_rem')
+        logger.info('Thread de processamento finalizada')
         if self.proxima_tela == self.tela_resultado:
             self.mudar_tela_resultado()
         elif self.proxima_tela == self.tela_historico:
             self.mudar_tela_historico()
+        # Após torcar a tela de fundo para a correta, encerramos o pop-up
+        logger.debug('Encerrando pop-op')
         self.pop_up.close()
         self.pop_up.destroy()
 
     def exportar_historico(self):
         # Exporta o histórico como JSON e como CSV no mesmo diretório
+        logger.debug('Exportando histórico')
         response = QtWidgets.QFileDialog.getExistingDirectory(
             caption='Select a destiantion to export files',
             directory=os.path.join(os.getcwd())
@@ -495,9 +524,11 @@ class Ui_Form(object):
             path = os.path.join(response, "export_rem", "{}.export.csv".format(response[0]))
             df = pd.DataFrame(data=self.historico.buscar_historico())
             df.to_csv(path)
+            logger.info('Arquivos exportados para {}'.format(os.path.join(response, "export_rem")))
 
     def importar_historico(self):
         # Importa um histórico salvo anteriormente em formato JSON
+        logger.debug('Importando histórico')
         file_filter = 'JSON File (*.json)'
         response = QtWidgets.QFileDialog.getOpenFileName(
             caption='Select a json file',
@@ -508,9 +539,11 @@ class Ui_Form(object):
         if not response[0] == "":
             self.historico.importar(response[0])
             self.mudar_tela_historico()
+            logger.info('Histórico importado com sucesso')
 
     def salvar_configuracoes(self):
         # Place holder função de salvamento de configurações
+        logger.debug('Chamada salvar_configuracoes')
         msg = QMessageBox()
         msg.setWindowTitle("CRNN-REM - Ainda não implementad!")
         msg.setText("A função \"salvar_configuracoes\" ainda não foi implementada.")
@@ -519,6 +552,7 @@ class Ui_Form(object):
 
     def voltar_as_configuracoes_iniciais(self):
         # Place holder função de voltar às configurações iniciais
+        logger.debug('Chamada voltar_as_configuracoes_iniciais')
         msg = QMessageBox()
         msg.setWindowTitle("CRNN-REM - Ainda não implementad!")
         msg.setText("A função \"voltar_as_configuracoes_iniciais\" ainda não foi implementada.")

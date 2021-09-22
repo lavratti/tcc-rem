@@ -1,16 +1,28 @@
-import os
-import time
-
-import matplotlib
-matplotlib.use('Agg') # No pictures displayed
-import pylab
-import librosa.display
-import numpy as np
 from PyQt5.QtCore import QThread, pyqtSignal
+import librosa.display
+import matplotlib
+import numpy as np
+import os
+import pylab
 
+#serviço de Log
+import logging
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+fmt = logging.Formatter('%(asctime)s | %(name)s | %(levelname)s | %(message)s')
+ch = logging.StreamHandler()
+ch.setLevel(logging.DEBUG)
+ch.setFormatter(fmt)
+logger.addHandler(ch)
+fh = logging.FileHandler(os.path.join("..", "rem.log"))
+fh.setLevel(logging.INFO)
+fh.setFormatter(fmt)
+logger.addHandler(fh)
+
+matplotlib.use('Agg') # No pictures displayed
 
 def gerar_espectograma(amostra):
-    print("Gerando espec. para {}".format(amostra))
+    logger.info("Gerando espectograma ({})".format(amostra))
     matplotlib.use('Agg') # No pictures displayed
     sig, fs = librosa.load(amostra)
     save_path = os.path.join('spectograms', '{}.jpg'.format(os.path.split(amostra)[1].split('.')[0]))
@@ -20,7 +32,7 @@ def gerar_espectograma(amostra):
     librosa.display.specshow(librosa.power_to_db(S, ref=np.max))
     pylab.savefig(save_path, bbox_inches=None, pad_inches=0)
     pylab.close()
-    print("Espec. OK")
+    logger.info("Espectograma gerado com sucesso ({})".format(amostra))
     return save_path
 
 
@@ -38,10 +50,10 @@ class ThreadedProcessarLista(QThread):
         self.is_running = True
 
     def run(self):
+        logger.info("Thread ThreadedProcessarLista começou a trabalhar")
 
         amostras_processadas = 0
         self.progresso_total.emit(0)
-
         for amostra in self.amostras:
 
             # Atualiza barra de progresso zerando amostra atual
@@ -63,10 +75,13 @@ class ThreadedProcessarLista(QThread):
 
         # Finalizou de processar a lista
         self.progresso_total.emit(100)
+        logger.info("Thread ThreadedProcessarLista terminou de trabalhar")
+
         self.is_running = False
 
 
 def processamento_basico_amostra(amostra):
+    logger.info("Chamada processamento_basico_amostra para {}".format(amostra))
     propriedades = {'arquivo': amostra}
     y, sr = librosa.load(amostra)
     onset_env = librosa.onset.onset_strength(y, sr=sr)

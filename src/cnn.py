@@ -53,7 +53,7 @@ train_datagen = ImageDataGenerator(
         horizontal_flip=True) # image will be flipper horiz
 test_datagen = ImageDataGenerator(rescale=1./255)
 
-pip install split-folders
+#pip install split-folders
 
 import splitfolders
 # To only split into training and validation set, set a tuple to `ratio`, i.e, `(.8, .2)`.

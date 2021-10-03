@@ -1,6 +1,9 @@
 from PyQt5.QtCore import QThread, pyqtSignal
 import librosa.display
 import matplotlib
+
+matplotlib.use('Agg')  # No pictures displayed
+
 import numpy as np
 import os
 import pylab
@@ -23,7 +26,6 @@ matplotlib.use('Agg') # No pictures displayed
 
 def gerar_espectograma(amostra):
     logger.info("Gerando espectograma ({})".format(amostra))
-    matplotlib.use('Agg') # No pictures displayed
     sig, fs = librosa.load(amostra)
     save_path = os.path.join('spectograms', '{}.jpg'.format(os.path.split(amostra)[1].split('.')[0]))
     pylab.axis('off') # no axis

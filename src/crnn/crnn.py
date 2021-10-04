@@ -1,132 +1,95 @@
-"""
-Thanks @Zain
-"""
 import csv
+import sys
+from datetime import datetime
 
-import librosa
+import pathlib
+import matplotlib.pyplot as plt
+import pandas as pd
 import numpy as np
-from keras.models import Sequential
-from keras.layers import Dense, Dropout, Activation, Reshape, Permute, BatchNormalization
-from keras.layers import Conv1D, Conv2D, MaxPooling1D, MaxPooling2D
-from keras.layers.recurrent import GRU, LSTM
-from keras.wrappers.scikit_learn import KerasRegressor
-from sklearn.metrics import accuracy_score
-from sklearn.model_selection import KFold, cross_val_score
+from tqdm import tqdm
+
+import tensorflow as tf
+from tensorflow import keras
+from tensorflow.keras import layers
+
+print("Done importing python libs.")
+
+print("Loading labels")
+song_ids = []
+mean_arousals = []
+mean_valences = []
+with open('dataset/annotations/static_annotations.csv', 'r') as f:
+    reader = csv.reader(f, delimiter=',')
+    next(reader)
+    for row in reader:
+        song_ids.append(int(row[0]))
+        mean_arousals.append(float(row[1]))
+        mean_valences.append(float(row[3]))
+
+print("Done loading labels")
+
+print("Loading dataset mel-spectograms.")
+melspectograms_list = []
+t0 = datetime.now()
+for n in tqdm(range(20), unit='files', file=sys.stdout):
+    if n in song_ids:
+        with open('dataset/melgrams/melgram_power_to_db/{}.csv'.format(n), 'rb') as f:
+            a = np.loadtxt(f, delimiter=',')
+            a = np.resize(a, (128, 1940))
+            melspectograms_list.append(a)
+    else:
+        print("Song not on label list, ignored")
+
+for s in melspectograms_list:
+    for r in s:
+        print(len(r))
+#npa = np.array(melspectograms_list, dtype=np.float)
+#print(np.shape(npa))
+
+print("Done loading spectograms into list.")
+
+dataset = pd.DataFrame({'melgram': np.asarray(melspectograms_list).astype(np.float32),
+                        'arousal': mean_arousals[:len(melspectograms_list)],
+                        'valence': mean_valences[:len(melspectograms_list)]})
+
+print(dataset)
+
+train_dataset = dataset.sample(frac=0.8, random_state=0)
+test_dataset = dataset.drop(train_dataset.index)
+train_arousal_labels = train_dataset.pop('arousal')
+train_valence_labels = train_dataset.pop('valence')
+test_arousal_labels = test_dataset.pop('arousal')
+test_valence_labels = test_dataset.pop('valence')
 
 
-def CRNN2D():
-    '''
-    Model used for evaluation in paper. Inspired by K. Choi model in:
-    https://github.com/keunwoochoi/music-auto_tagging-keras/blob/master/music_tagger_crnn.py
-    '''
+def basic_model():
+    model = keras.Sequential([
+        layers.Dense(64, activation='relu', input_shape=[len(train_dataset.keys())]),
+        layers.Dense(64, activation='relu'),
+        layers.Dense(1)
+    ])
 
-    nb_layers = 4  # number of convolutional layers
-    nb_filters = [64, 128, 128, 128]  # filter sizes
-    kernel_size = (3, 3)  # convolution kernel size
-    activation = 'elu'  # activation function to use after each layer
-    pool_size = [(2, 2), (4, 2), (4, 2), (4, 2),
-                 (4, 2)]  # size of pooling area
+    optimizer = tf.keras.optimizers.RMSprop(0.001)
 
-    # shape of input data (frequency, time, channels)
-    frequency_axis = 1
-    time_axis = 2
-    channel_axis = 3
-
-    # Create sequential model and normalize along frequency axis
-    model = Sequential()
-    model.add(BatchNormalization(axis=frequency_axis))
-
-    # First convolution layer specifies shape
-    model.add(Conv2D(nb_filters[0], kernel_size=kernel_size, padding='same',
-                     data_format="channels_last",
-                     ))
-    model.add(Activation(activation))
-    model.add(BatchNormalization(axis=channel_axis))
-    model.add(MaxPooling2D(pool_size=pool_size[0], strides=pool_size[0]))
-    model.add(Dropout(0.1))
-
-    # Add more convolutional layers
-    for layer in range(nb_layers - 1):
-        # Convolutional layer
-        model.add(Conv2D(nb_filters[layer + 1], kernel_size=kernel_size,
-                         padding='same'))
-        model.add(Activation(activation))
-        model.add(BatchNormalization(
-            axis=channel_axis))  # Improves overfitting/underfitting
-        model.add(MaxPooling2D(pool_size=pool_size[layer + 1],
-                               strides=pool_size[layer + 1]))  # Max pooling
-        model.add(Dropout(0.1))
-
-        # Reshaping input for recurrent layer
-    # (frequency, time, channels) --> (time, frequency, channel)
-    model.add(Permute((time_axis, frequency_axis, channel_axis)))
-    resize_shape = model.output_shape[2] * model.output_shape[3]
-    model.add(Reshape((model.output_shape[1], resize_shape)))
-
-    # recurrent layer
-    model.add(GRU(32, return_sequences=True))
-    model.add(GRU(32, return_sequences=False))
-    model.add(Dropout(0.3))
-
-    # Output layer
-    model.add(Dense(1))
+    model.compile(loss='mse',
+                  optimizer=optimizer,
+                  metrics=['mae', 'mse'])
     return model
 
+model = basic_model()
+model.summary()
 
-def melgram(audio_path):
-    ''' Compute a mel-spectrogram and returns it in a shape of (1,1,96,?), where
-    96 == #mel-bins and
-    parameters
-    ----------
-    audio_path: path for the audio file.
-                Any format supported by audioread will work.
-    More info: http://librosa.github.io/librosa/generated/librosa.core.load.html#librosa.core.load
-    '''
+# Mostra o progresso do treinamento imprimindo um único ponto para cada epoch completada
+class PrintDot(keras.callbacks.Callback):
+  def on_epoch_end(self, epoch, logs):
+    if epoch % 100 == 0: print('')
+    print('.', end='')
+EPOCHS = 1000
+history = model.fit(
+  train_dataset, train_arousal_labels,
+  epochs=EPOCHS, validation_split = 0.2, verbose=0,
+  callbacks=[PrintDot()])
 
-    # mel-spectrogram parameters
-    SR = 22050
-    N_FFT = 512
-    N_MELS = 96
-    HOP_LEN = 256
-
-    src, sr = librosa.load(audio_path, sr=SR)  # whole signal
-    ret = librosa.feature.melspectrogram(y=src, sr=SR, hop_length=HOP_LEN, n_fft=N_FFT, n_mels=N_MELS) ** 2
-    ret = ret[np.newaxis, np.newaxis, :]
-    return ret
-
-
-def main():
-    seed = 1
-
-    X = []
-    y_arrousal = []
-    y_valence = []
-
-    afile = open(
-        'C:\\Users\\lucas.lavratti\\OneDrive - Grupo Marista\\Eng. de Computação\\TCC\\tcc-rem\\src\\crnn\\dataset\\annotations\\static_annotations.csv')
-    reader = csv.reader(afile)
-    next(reader)  # pular header
-    for n in range(5):
-        song_id, mean_arousal, std_arousal, mean_valence, std_valence = next(reader)
-        song_id = int(song_id)
-        # shape of input data (frequency, time, channels)
-        mel = melgram(
-            'C:\\Users\\lucas.lavratti\\OneDrive - Grupo Marista\\Eng. de Computação\\TCC\\tcc-rem\\src\\crnn\\dataset\\clips_45seconds\\{}.mp3'.format(
-                song_id))
-        X.append(mel)
-        y_arrousal.append(float(mean_arousal))
-        y_valence.append(float(mean_valence))
-        print("{:3.0f}% done reading samples. Song id: {:02d}, valence {:1.3f}, arrousal {:1.3f}.".format(100*(n/50), song_id, y_valence[-1], y_arrousal[-1]))
-
-    estimator = KerasRegressor(build_fn=CRNN2D, verbose=True)
-    # kfold = KFold(n_splits=10, random_state=seed)
-    results = cross_val_score(estimator, X, y_arrousal)  # , cv=kfold)
-    print("Results: %.2f (%.2f) MSE" % (results.mean(), results.std()))
-
-    estimator.fit(X, y_arrousal)
-    prediction = estimator.predict(X)
-    accuracy_score(y_arrousal, prediction)
-
-
-if __name__ == "__main__":
-    main()
+hist = pd.DataFrame(history.history)
+hist['epoch'] = history.epoch
+hist.tail()

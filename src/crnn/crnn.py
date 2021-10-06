@@ -1,95 +1,98 @@
-import csv
-import sys
-from datetime import datetime
-
 import pathlib
 import matplotlib.pyplot as plt
-import pandas as pd
 import numpy as np
-from tqdm import tqdm
-
+import pandas as pd
 import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import layers
 
-print("Done importing python libs.")
+"""
+dataset_path = keras.utils.get_file("auto-mpg.data", "http://archive.ics.uci.edu/ml/machine-learning-databases/auto-mpg/auto-mpg.data")
+column_names = ['MPG', 'Cylinders', 'Displacement', 'Horsepower', 'Weight', 'Acceleration', 'Model Year', 'Origin']
+raw_dataset = pd.read_csv(dataset_path, names=column_names,
+                      na_values = "?", comment='\t',
+                      sep=" ", skipinitialspace=True)
 
-print("Loading labels")
-song_ids = []
-mean_arousals = []
-mean_valences = []
-with open('dataset/annotations/static_annotations.csv', 'r') as f:
-    reader = csv.reader(f, delimiter=',')
-    next(reader)
-    for row in reader:
-        song_ids.append(int(row[0]))
-        mean_arousals.append(float(row[1]))
-        mean_valences.append(float(row[3]))
-
-print("Done loading labels")
-
-print("Loading dataset mel-spectograms.")
-melspectograms_list = []
-t0 = datetime.now()
-for n in tqdm(range(20), unit='files', file=sys.stdout):
-    if n in song_ids:
-        with open('dataset/melgrams/melgram_power_to_db/{}.csv'.format(n), 'rb') as f:
-            a = np.loadtxt(f, delimiter=',')
-            a = np.resize(a, (128, 1940))
-            melspectograms_list.append(a)
-    else:
-        print("Song not on label list, ignored")
-
-for s in melspectograms_list:
-    for r in s:
-        print(len(r))
-#npa = np.array(melspectograms_list, dtype=np.float)
-#print(np.shape(npa))
-
-print("Done loading spectograms into list.")
-
-dataset = pd.DataFrame({'melgram': np.asarray(melspectograms_list).astype(np.float32),
-                        'arousal': mean_arousals[:len(melspectograms_list)],
-                        'valence': mean_valences[:len(melspectograms_list)]})
-
-print(dataset)
-
-train_dataset = dataset.sample(frac=0.8, random_state=0)
+dataset = raw_dataset.copy()
+dataset.isna().sum()
+dataset = dataset.dropna()
+origin = dataset.pop('Origin')
+dataset['USA'] = (origin == 1)*1.0
+dataset['Europe'] = (origin == 2)*1.0
+dataset['Japan'] = (origin == 3)*1.0
+train_dataset = dataset.sample(frac=0.8,random_state=0)
 test_dataset = dataset.drop(train_dataset.index)
-train_arousal_labels = train_dataset.pop('arousal')
-train_valence_labels = train_dataset.pop('valence')
-test_arousal_labels = test_dataset.pop('arousal')
-test_valence_labels = test_dataset.pop('valence')
+train_stats = train_dataset.describe()
+train_stats.pop("MPG")
+train_stats = train_stats.transpose()
+train_labels_a = train_dataset.pop('MPG')
+test_labels = test_dataset.pop('MPG')
+
+"""
+
+import dataset.mydataset as mydataset
+mean_arousals, mean_valences, train_dataset = mydataset.load(20, 0)
 
 
-def basic_model():
+def build_model():
+    input_shape = np.shape(train_dataset[0])
+    print(input_shape)
     model = keras.Sequential([
-        layers.Dense(64, activation='relu', input_shape=[len(train_dataset.keys())]),
+        layers.Flatten(input_shape=input_shape),
         layers.Dense(64, activation='relu'),
         layers.Dense(1)
     ])
 
     optimizer = tf.keras.optimizers.RMSprop(0.001)
 
-    model.compile(loss='mse',
-                  optimizer=optimizer,
-                  metrics=['mae', 'mse'])
+    model.compile(loss='mse', optimizer=optimizer, metrics=['mae', 'mse'])
     return model
 
-model = basic_model()
-model.summary()
 
-# Mostra o progresso do treinamento imprimindo um único ponto para cada epoch completada
+model = build_model()
+
+example_batch = train_dataset[:10]
+example_result = model.predict(example_batch)
+
 class PrintDot(keras.callbacks.Callback):
   def on_epoch_end(self, epoch, logs):
     if epoch % 100 == 0: print('')
     print('.', end='')
+
 EPOCHS = 1000
+
 history = model.fit(
-  train_dataset, train_arousal_labels,
+  train_dataset, mean_arousals,
   epochs=EPOCHS, validation_split = 0.2, verbose=0,
   callbacks=[PrintDot()])
 
 hist = pd.DataFrame(history.history)
 hist['epoch'] = history.epoch
-hist.tail()
+
+def plot_history(history):
+  hist = pd.DataFrame(history.history)
+  hist['epoch'] = history.epoch
+
+  plt.figure()
+  plt.xlabel('Epoch')
+  plt.ylabel('Mean Abs Error [MPG]')
+  plt.plot(hist['epoch'], hist['mae'],
+           label='Train Error')
+  plt.plot(hist['epoch'], hist['val_mae'],
+           label = 'Val Error')
+  plt.ylim([0,5])
+  plt.legend()
+
+  plt.figure()
+  plt.xlabel('Epoch')
+  plt.ylabel('Mean Square Error [$MPG^2$]')
+  plt.plot(hist['epoch'], hist['mse'],
+           label='Train Error')
+  plt.plot(hist['epoch'], hist['val_mse'],
+           label = 'Val Error')
+  plt.ylim([0,20])
+  plt.legend()
+  plt.show()
+
+
+plot_history(history)

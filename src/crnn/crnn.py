@@ -33,7 +33,8 @@ def plot_history(history):
              label='Val Error')
     plt.ylim([0, 20])
     plt.legend()
-    plt.show()
+    plt.savefig('last_result.png')
+    plt.close()
 
 
 def build_model():

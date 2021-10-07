@@ -1,46 +1,69 @@
-import pathlib
+import os
+
+from tensorflow import keras
+from tensorflow.keras import layers
+import dataset.mydataset as mydataset
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import tensorflow as tf
-from tensorflow import keras
-from tensorflow.keras import layers
+import tensorflow_addons as tfa
 
-"""
-dataset_path = keras.utils.get_file("auto-mpg.data", "http://archive.ics.uci.edu/ml/machine-learning-databases/auto-mpg/auto-mpg.data")
-column_names = ['MPG', 'Cylinders', 'Displacement', 'Horsepower', 'Weight', 'Acceleration', 'Model Year', 'Origin']
-raw_dataset = pd.read_csv(dataset_path, names=column_names,
-                      na_values = "?", comment='\t',
-                      sep=" ", skipinitialspace=True)
 
-dataset = raw_dataset.copy()
-dataset.isna().sum()
-dataset = dataset.dropna()
-origin = dataset.pop('Origin')
-dataset['USA'] = (origin == 1)*1.0
-dataset['Europe'] = (origin == 2)*1.0
-dataset['Japan'] = (origin == 3)*1.0
-train_dataset = dataset.sample(frac=0.8,random_state=0)
-test_dataset = dataset.drop(train_dataset.index)
-train_stats = train_dataset.describe()
-train_stats.pop("MPG")
-train_stats = train_stats.transpose()
-train_labels_a = train_dataset.pop('MPG')
-test_labels = test_dataset.pop('MPG')
+def plot_history(history):
+    hist = pd.DataFrame(history.history)
+    hist['epoch'] = history.epoch
 
-"""
+    plt.figure()
+    plt.xlabel('Epoch')
+    plt.ylabel('Mean Abs Error [MPG]')
+    plt.plot(hist['epoch'], hist['mae'],
+             label='Train Error')
+    plt.plot(hist['epoch'], hist['val_mae'],
+             label='Val Error')
+    plt.ylim([0, 5])
+    plt.legend()
 
-import dataset.mydataset as mydataset
-mean_arousals, mean_valences, train_dataset = mydataset.load(20, 0)
+    plt.figure()
+    plt.xlabel('Epoch')
+    plt.ylabel('Mean Square Error [$MPG^2$]')
+    plt.plot(hist['epoch'], hist['mse'],
+             label='Train Error')
+    plt.plot(hist['epoch'], hist['val_mse'],
+             label='Val Error')
+    plt.ylim([0, 20])
+    plt.legend()
+    plt.show()
 
 
 def build_model():
-    input_shape = np.shape(train_dataset[0])
-    print(input_shape)
     model = keras.Sequential([
-        layers.Flatten(input_shape=input_shape),
-        layers.Dense(64, activation='relu'),
-        layers.Dense(1)
+        # Input block
+        layers.BatchNormalization(name='bn0'),
+        layers.Reshape((128, 1940, 1)),
+
+        # Conv block 1
+        layers.Convolution2D(64, 3, 3, name='conv1'),
+        layers.BatchNormalization(axis=3, name='bn1'),
+        layers.ELU(),
+        layers.MaxPooling2D(pool_size=(2, 2), strides=(2, 2), name='pool1'),
+        layers.Dropout(0.1, name='dropout1'),
+
+        # Conv block 2
+        layers.Convolution2D(128, 3, 3, name='conv2'),
+        layers.BatchNormalization(axis=3, name='bn2'),
+        layers.ELU(),
+        layers.MaxPooling2D(pool_size=(2, 2), strides=(2, 2), name='pool2'),
+        layers.Dropout(0.1, name='dropout2'),
+
+        # GRU
+        layers.Reshape((3 * 53, 128)),
+        layers.GRU(32, return_sequences=True, name='gru1'),
+        layers.GRU(32, return_sequences=False, name='gru2'),
+
+        # Out
+        layers.Dropout(0.3, name='dropout3'),
+        layers.Dense(1, activation='sigmoid', name='output')
     ])
 
     optimizer = tf.keras.optimizers.RMSprop(0.001)
@@ -48,51 +71,25 @@ def build_model():
     model.compile(loss='mse', optimizer=optimizer, metrics=['mae', 'mse'])
     return model
 
+if not os.path.isfile('dataset/melspectograms.pickle'):
+    print("Generating pickle")
+    mydataset.gen_pickle()
+    print("Generating pickle")
+
+print("Loading pickle")
+mean_arousals, mean_valences, train_dataset = mydataset.quick_load_500()
+print("Loaded pickle")
 
 model = build_model()
-
-example_batch = train_dataset[:10]
-example_result = model.predict(example_batch)
-
-class PrintDot(keras.callbacks.Callback):
-  def on_epoch_end(self, epoch, logs):
-    if epoch % 100 == 0: print('')
-    print('.', end='')
+model.build(np.shape(train_dataset))
+model.summary()
 
 EPOCHS = 1000
-
 history = model.fit(
-  train_dataset, mean_arousals,
-  epochs=EPOCHS, validation_split = 0.2, verbose=0,
-  callbacks=[PrintDot()])
+    train_dataset, mean_arousals,
+    epochs=EPOCHS, validation_split=0.2, verbose=0,
+    callbacks=[tfa.callbacks.TQDMProgressBar(show_epoch_progress=False)])
 
 hist = pd.DataFrame(history.history)
 hist['epoch'] = history.epoch
-
-def plot_history(history):
-  hist = pd.DataFrame(history.history)
-  hist['epoch'] = history.epoch
-
-  plt.figure()
-  plt.xlabel('Epoch')
-  plt.ylabel('Mean Abs Error [MPG]')
-  plt.plot(hist['epoch'], hist['mae'],
-           label='Train Error')
-  plt.plot(hist['epoch'], hist['val_mae'],
-           label = 'Val Error')
-  plt.ylim([0,5])
-  plt.legend()
-
-  plt.figure()
-  plt.xlabel('Epoch')
-  plt.ylabel('Mean Square Error [$MPG^2$]')
-  plt.plot(hist['epoch'], hist['mse'],
-           label='Train Error')
-  plt.plot(hist['epoch'], hist['val_mse'],
-           label = 'Val Error')
-  plt.ylim([0,20])
-  plt.legend()
-  plt.show()
-
-
 plot_history(history)

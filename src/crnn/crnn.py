@@ -1,5 +1,6 @@
 import os
 
+import pylab
 from tensorflow import keras
 from tensorflow.keras import layers
 import dataset.mydataset as mydataset
@@ -14,27 +15,27 @@ def plot_history(history):
     hist = pd.DataFrame(history.history)
     hist['epoch'] = history.epoch
 
-    plt.figure()
-    plt.xlabel('Epoch')
-    plt.ylabel('Mean Abs Error [MPG]')
-    plt.plot(hist['epoch'], hist['mae'],
+    pylab.xlabel('Epoch')
+    pylab.ylabel('Mean Abs Error [MPG]')
+    pylab.plot(hist['epoch'], hist['mae'],
              label='Train Error')
-    plt.plot(hist['epoch'], hist['val_mae'],
+    pylab.plot(hist['epoch'], hist['val_mae'],
              label='Val Error')
-    plt.ylim([0, 5])
-    plt.legend()
+    pylab.ylim([0, 5])
+    pylab.legend()
+    pylab.savefig('last_result_MPG.png')
+    pylab.close()
 
-    plt.figure()
-    plt.xlabel('Epoch')
-    plt.ylabel('Mean Square Error [$MPG^2$]')
-    plt.plot(hist['epoch'], hist['mse'],
+    pylab.xlabel('Epoch')
+    pylab.ylabel('Mean Square Error [$MPG^2$]')
+    pylab.plot(hist['epoch'], hist['mse'],
              label='Train Error')
-    plt.plot(hist['epoch'], hist['val_mse'],
+    pylab.plot(hist['epoch'], hist['val_mse'],
              label='Val Error')
-    plt.ylim([0, 20])
-    plt.legend()
-    plt.savefig('last_result.png')
-    plt.close()
+    pylab.ylim([0, 20])
+    pylab.legend()
+    pylab.savefig('last_result_MPG2.png')
+    pylab.close()
 
 
 def build_model():
@@ -57,13 +58,19 @@ def build_model():
         layers.MaxPooling2D(pool_size=(2, 2), strides=(2, 2), name='pool2'),
         layers.Dropout(0.1, name='dropout2'),
 
+        # Conv block 3
+        layers.Convolution2D(128, 3, 3, name='conv3'),
+        layers.BatchNormalization(axis=3, name='bn3'),
+        layers.ELU(),
+        layers.Dropout(0.1, name='dropout3'),
+
         # GRU
-        layers.Reshape((3 * 53, 128)),
+        layers.Reshape((17, 128)),
         layers.GRU(32, return_sequences=True, name='gru1'),
-        layers.GRU(32, return_sequences=False, name='gru2'),
+        layers.GRU(64, return_sequences=False, name='gru2'),
 
         # Out
-        layers.Dropout(0.3, name='dropout3'),
+        layers.Dropout(0.3, name='dropout4'),
         layers.Dense(1, activation='sigmoid', name='output')
     ])
 
@@ -85,7 +92,7 @@ model = build_model()
 model.build(np.shape(train_dataset))
 model.summary()
 
-EPOCHS = 1000
+EPOCHS = 10
 history = model.fit(
     train_dataset, mean_arousals,
     epochs=EPOCHS, validation_split=0.2, verbose=0,

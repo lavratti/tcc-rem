@@ -38,14 +38,14 @@ def load(s=None, offset=0):
     mean_arousals = np.array(mean_arousals[:len(melspectograms_list)])
     mean_valences = np.array(mean_valences[:len(melspectograms_list)])
     melspectograms = np.array(melspectograms_list)
-    min = melspectograms.min(axis=(1, 2), keepdims=True)
-    max = melspectograms.max(axis=(1, 2), keepdims=True)
-    melspectograms = (melspectograms - min) / (max - min)
+    minmel = melspectograms.min(axis=(1, 2), keepdims=True)
+    maxmel = melspectograms.max(axis=(1, 2), keepdims=True)
+    melspectograms = (melspectograms - minmel) / (maxmel - minmel)
     print(np.shape(melspectograms))
 
     return mean_arousals, mean_valences, melspectograms
 
-def quick_load_500():
+def quick_load():
     mean_arousals = pickle.load(open('dataset/mean_arousals.pickle', 'rb'))
     mean_valences = pickle.load(open('dataset/mean_valences.pickle', 'rb'))
     melspectograms = pickle.load(open('dataset/melspectograms.pickle', 'rb'))

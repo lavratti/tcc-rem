@@ -30,7 +30,7 @@ def load(s=None, offset=0):
     for n in tqdm(song_ids[:s], unit='files', file=sys.stdout):
         with open('dataset/melgrams/melgram_power_to_db/{}.csv'.format(n), 'rb') as f:
             a = np.loadtxt(f, delimiter=',')
-            a = np.resize(a, (128, 1940))
+            a = np.resize(a, (128, 64))
             melspectograms_list.append(a)
         if len(melspectograms_list) == s:
             break

@@ -16,7 +16,8 @@ for n in range(1, 1001):
     path = os.path.join("clips_45seconds", filename)
     sig, fs = librosa.load(path)
 
-    melgram = librosa.feature.melspectrogram(y=sig, sr=fs)
+    hl = int((fs*45)/64)
+    melgram = librosa.feature.melspectrogram(y=sig, sr=fs, hop_length=hl, )
     melgram_p = librosa.power_to_db(melgram, ref=np.max)
 
     all_melgrams.append(melgram)

@@ -18,52 +18,43 @@ def plot_history(history):
 
     pylab.xlabel('Epoch')
     pylab.ylabel('Mean Abs Error [MPG]')
-    pylab.plot(hist['epoch'], hist['mae'],
-               label='Train Error')
-    pylab.plot(hist['epoch'], hist['val_mae'],
-               label='Val Error')
-    pylab.ylim([0, 5])
+    pylab.plot(hist['epoch'], hist['valence_mae'], label='valence_mae')
+    pylab.plot(hist['epoch'], hist['val_valence_mae'], label='val_valence_mae')
+    pylab.plot(hist['epoch'], hist['arousal_mae'], label='arousal_mae')
+    pylab.plot(hist['epoch'], hist['val_arousal_mae'], label='val_arousal_mae')
     pylab.legend()
-    pylab.savefig('last_result_MPG.png')
+    pylab.savefig('last_result_MAE.png')
     pylab.close()
 
     pylab.xlabel('Epoch')
     pylab.ylabel('Mean Square Error [$MPG^2$]')
-    pylab.plot(hist['epoch'], hist['mse'],
-               label='Train Error')
-    pylab.plot(hist['epoch'], hist['val_mse'],
-               label='Val Error')
+    pylab.plot(hist['epoch'], hist['valence_mse'], label='valence_mse')
+    pylab.plot(hist['epoch'], hist['val_valence_mse'], label='val_valence_mse')
+    pylab.plot(hist['epoch'], hist['arousal_mse'], label='arousal_mse')
+    pylab.plot(hist['epoch'], hist['val_arousal_mse'], label='val_arousal_mse')
     pylab.legend()
-    pylab.ylim([0, 5])
-    pylab.savefig('last_result_MPG2.png')
+    pylab.savefig('last_result_MSE.png')
     pylab.close()
 
 
 def get_model():
-    inputs = tf.keras.Input(shape=(128, 1940, 1))
 
-    x = tf.keras.layers.MaxPooling2D(pool_size=(2, 28), strides=(2, 30))(inputs)
-    x = tf.keras.layers.Conv2D(128, (3, 3), activation='relu')(x)
-    x = tf.keras.layers.BatchNormalization()(x)
-    x = tf.keras.layers.Dropout(0.1)(x)
-    x = tf.keras.layers.Conv2D(128, (3, 3), activation='relu')(x)
-    x = tf.keras.layers.BatchNormalization()(x)
-    x = tf.keras.layers.Dropout(0.1)(x)
+    inputs = tf.keras.Input(shape=(128, 64, 1))
+
+    x = tf.keras.layers.MaxPooling2D(pool_size=(2, 1), strides=(2, 1))(inputs)
     x = tf.keras.layers.Conv2D(64, (3, 3), activation='relu')(x)
     x = tf.keras.layers.BatchNormalization()(x)
-    x = tf.keras.layers.Dropout(0.1)(x)
+    x = tf.keras.layers.Dropout(0.75)(x)
+    x = tf.keras.layers.Reshape((62, -1))(x)
     x = tf.keras.layers.TimeDistributed(tf.keras.layers.Dense(8))(x)
-    x = tf.keras.layers.TimeDistributed(tf.keras.layers.Dense(8))(x)
-    x = tf.keras.layers.TimeDistributed(tf.keras.layers.Dense(1))(x)
-    x = tf.keras.layers.Reshape(tuple([y for y in x.shape.as_list() if y != 1 and y is not None]))(x)
-    x = tf.keras.layers.GRU(64)(x)
+    x = tf.keras.layers.Bidirectional(tf.keras.layers.GRU(8, activation='tanh',))(x)
+    x = tf.keras.layers.Dropout(0.25)(x)
 
-    outputs = tf.keras.layers.Dense(2)(x)
+    outputs = [tf.keras.layers.Dense(1, name=name)(x) for name in ['valence', 'arousal']]
 
     model = tf.keras.Model(inputs=inputs, outputs=outputs)
-
-    optimizer = tf.keras.optimizers.RMSprop(0.001)
-    model.compile(loss='mse', optimizer=optimizer, metrics=['mae', 'mse'])
+    optimizer = tf.keras.optimizers.Adam()
+    model.compile(loss='mae', optimizer=optimizer, metrics=['mae', 'mse'])
 
     return model
 
@@ -90,10 +81,17 @@ def main():
     mean_arousals, mean_valences, dataset = mydataset.quick_load()
     print("Loaded pickle")
 
-    train_labels = [mean_arousals[:int(len(mean_arousals) * 0.5)], mean_valences[:int(len(mean_valences) * 0.5)]]
-    test_labels = [mean_arousals[int(len(mean_arousals) * 0.5):], mean_valences[int(len(mean_valences) * 0.5):]]
-    train_dataset = dataset[:int(len(dataset) * 0.5)]
-    test_dataset = dataset[int(len(dataset) * 0.5):]
+    for aux in range(len(dataset)):
+        mean_valences[aux] = (mean_valences[aux])/5 - 1
+        mean_arousals[aux] = (mean_arousals[aux])/5 - 1
+
+    split = 0.5
+    train_labels = [mean_valences[:int(len(mean_valences) * split)], mean_arousals[:int(len(mean_arousals) * split)]]
+    test_labels = [mean_valences[int(len(mean_valences) * split):], mean_arousals[int(len(mean_arousals) * split):]]
+    train_dataset = dataset[:int(len(dataset) * split)]
+    test_dataset = dataset[int(len(dataset) * split):]
+
+    print("Train: {}; Test: {}".format(len(train_dataset), len(test_dataset)))
 
     if not os.path.isfile("model/saved_model.pb"):
         model = get_model()
@@ -101,30 +99,28 @@ def main():
         model.summary()
 
         EPOCHS = 1000
-        es_callback = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=3)
+        # es_callback = tf.keras.callbacks.EarlyStopping(monitor='mse', patience=10)
         history = model.fit(
             train_dataset, train_labels,
             epochs=EPOCHS, validation_split=0.2, verbose=0, shuffle=True,
-            callbacks=[tfa.callbacks.TQDMProgressBar(show_epoch_progress=False), es_callback])
+            callbacks=[tfa.callbacks.TQDMProgressBar(show_epoch_progress=False), ])  # es_callback])
 
         model.save("model")
-
-        hist = pd.DataFrame(history.history)
-        hist['epoch'] = history.epoch
-        plot_history(history)  
+        plot_history(history)
 
     model = tf.keras.models.load_model("model")
+
+    print("Evaluate")
+    result = model.evaluate(test_dataset, test_labels)
+    print(dict(zip(model.metrics_names, result)))
+
     prediction = model.predict(test_dataset)
     test_points = []
     pred_points = []
-    print("True labels | Predicted labels")
-    for i in range(len(test_labels[0])):
+    # print("True labels | Predicted labels")
+    for i in range(len(prediction[0])):
         test_points.append([test_labels[0][i], test_labels[1][i]])
-        pred_points.append([float(prediction[i][0]), float(prediction[i][1])])
-        print("{:2.3f} {:2.3f} | {:2.3f} {:2.3f}".format(test_labels[0][i],
-                                                         test_labels[1][i],
-                                                         float(prediction[i][0]),
-                                                         float(prediction[i][1])))
+        pred_points.append([float(prediction[0][i]), float(prediction[1][i])])
 
     plt.scatter(*zip(*test_points), s=1)
     plt.scatter(*zip(*pred_points), s=1)
@@ -135,7 +131,9 @@ def main():
 
     plt.figure()
     for a, b in zip(test_points, pred_points):
-        plt.plot([a[0], b[0]], [a[1], b[1]])
+        plt.scatter(a[0], a[1], s=1, color="blue")
+        plt.scatter(b[0], b[1], s=1, color="orange")
+        plt.plot([a[0], b[0]], [a[1], b[1]], "black", linewidth=1, alpha=0.1)
     plt.show()
 
 if __name__ == "__main__":

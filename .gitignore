@@ -135,3 +135,7 @@ dmypy.json
 **/.idea/**
 **/temp/**
 **/src/gui/spectograms/**
+/src/crnn/dataset/melgrams
+/src/crnn/dataset/annotations
+/src/crnn/dataset/clips_45seconds
+*.pickle

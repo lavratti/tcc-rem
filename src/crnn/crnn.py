@@ -12,6 +12,8 @@ import tensorflow_addons as tfa
 
 random.seed(1)
 
+activation = 'elu' #'relu' #'selu'
+
 def plot_history(history):
     hist = pd.DataFrame(history.history)
     hist['epoch'] = history.epoch
@@ -42,12 +44,27 @@ def get_model():
     inputs = tf.keras.Input(shape=(128, 64, 1))
 
     x = tf.keras.layers.MaxPooling2D(pool_size=(2, 1), strides=(2, 1))(inputs)
-    x = tf.keras.layers.Conv2D(64, (3, 3), activation='relu')(x)
+    x = tf.keras.layers.Conv2D(64, (3, 3), activation='relu', padding='same')(x) # 1 layer
     x = tf.keras.layers.BatchNormalization()(x)
+    x = tf.keras.layers.MaxPooling2D(pool_size=(2, 1), strides=(2, 1))(x)
+    # x = tf.keras.layers.AveragePooling2D(pool_size=(2, 1), strides=(2, 1))(x)
     x = tf.keras.layers.Dropout(0.75)(x)
+
+    x = tf.keras.layers.Conv2D(64, (3, 3), activation=activation, padding='same')(x) # 2 layer
+    x = tf.keras.layers.BatchNormalization()(x)
+    x = tf.keras.layers.MaxPooling2D(pool_size=(2, 1), strides=(2, 1))(x)
+    # x = tf.keras.layers.AveragePooling2D(pool_size=(2, 1), strides=(2, 1))(x)
+    x = tf.keras.layers.Dropout(0.75)(x)
+
+    # x = tf.keras.layers.Conv2D(64, (3, 3), activation=activation, padding='same')(x) # 3 layer
+    # x = tf.keras.layers.BatchNormalization()(x)
+    # x = tf.keras.layers.MaxPooling2D(pool_size=(2, 1), strides=(2, 1))(x)
+    # x = tf.keras.layers.AveragePooling2D(pool_size=(2, 1), strides=(2, 1))(x)
+    #x = tf.keras.layers.Dropout(0.75)(x)
+
     x = tf.keras.layers.Reshape((62, -1))(x)
     x = tf.keras.layers.TimeDistributed(tf.keras.layers.Dense(8))(x)
-    x = tf.keras.layers.Bidirectional(tf.keras.layers.GRU(8, activation='tanh',))(x)
+    x = tf.keras.layers.Bidirectional(tf.keras.layers.GRU(8, activation='tanh',padding='same'))(x)
     x = tf.keras.layers.Dropout(0.25)(x)
 
     outputs = [tf.keras.layers.Dense(1, name=name)(x) for name in ['valence', 'arousal']]

@@ -1,15 +1,14 @@
+import numpy as np
 from PyQt5.QtCore import QThread, pyqtSignal
 import librosa.display
 import matplotlib
-
-matplotlib.use('Agg')  # No pictures displayed
-
-import numpy as np
 import os
-import pylab
+import logging
+import tensorflow as tf
+
+matplotlib.use('Agg') # No pictures displayed
 
 #serviço de Log
-import logging
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 fmt = logging.Formatter('%(asctime)s | %(name)s | %(levelname)s | %(message)s')
@@ -21,22 +20,6 @@ fh = logging.FileHandler(os.path.join("..", "rem.log"))
 fh.setLevel(logging.INFO)
 fh.setFormatter(fmt)
 logger.addHandler(fh)
-
-matplotlib.use('Agg') # No pictures displayed
-
-def gerar_espectograma(amostra):
-    logger.info("Gerando espectograma ({})".format(amostra))
-    sig, fs = librosa.load(amostra)
-    save_path = os.path.join('spectograms', '{}.jpg'.format(os.path.split(amostra)[1].split('.')[0]))
-    pylab.axis('off') # no axis
-    pylab.axes([0., 0., 1., 1.], frameon=False, xticks=[], yticks=[]) # Remove the white edge
-    S = librosa.feature.melspectrogram(y=sig, sr=fs)
-    librosa.display.specshow(librosa.power_to_db(S, ref=np.max))
-    pylab.savefig(save_path, bbox_inches=None, pad_inches=0)
-    pylab.close()
-    logger.info("Espectograma gerado com sucesso ({})".format(amostra))
-    return save_path
-
 
 class ThreadedProcessarLista(QThread):
 
@@ -63,7 +46,10 @@ class ThreadedProcessarLista(QThread):
 
             # Processamento inicial
             resultado = processamento_basico_amostra(amostra)
-            resultado['spectogram'] = gerar_espectograma(amostra)
+            self.progresso_parcial.emit(10)
+            predict = processamento_CRNN_amostra(amostra)
+            #resultado['valence'] = 0
+            #resultado['arousal'] = 0
             # TODO: Processamento maior + Atualiza barra de progresso
 
             # Atualiza barra de progresso
@@ -88,5 +74,18 @@ def processamento_basico_amostra(amostra):
     y, sr = librosa.load(amostra)
     onset_env = librosa.onset.onset_strength(y, sr=sr)
     propriedades['bpm'] = librosa.beat.tempo(onset_envelope=onset_env, sr=sr)[0]
+    logger.info("Resultado: {}".format(propriedades))
     return propriedades
 
+def processamento_CRNN_amostra(amostra):
+    logger.info("Chamada processamento_CRNN_amostra para {}".format(amostra))
+    sig, fs = librosa.load(amostra)
+    hl = int(len(sig) / 64)
+    melgram = librosa.feature.melspectrogram(y=sig, sr=fs, hop_length=hl,)
+    melgram = melgram[:, :64]
+    melgram_p = librosa.power_to_db(melgram, ref=np.max)
+    melgram_p.reshape(128, 64, 1)
+    model = tf.keras.models.load_model("./../crnn/model", compile=True)
+    prediction = model.predict(np.array([melgram_p,]), batch_size=1)
+    logger.info("Resultado: {}".format(prediction))
+    return prediction

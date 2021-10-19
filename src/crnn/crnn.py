@@ -37,9 +37,9 @@ def plot_history(history):
     pylab.close()
 
 
-def get_model():
+def get_model(shape=(128, 64, 1)):
 
-    inputs = tf.keras.Input(shape=(128, 64, 1))
+    inputs = tf.keras.Input(shape)
 
     x = tf.keras.layers.MaxPooling2D(pool_size=(2, 1), strides=(2, 1))(inputs)
     x = tf.keras.layers.Conv2D(64, (3, 3), activation='relu')(x)
@@ -85,7 +85,7 @@ def main():
         mean_valences[aux] = (mean_valences[aux])/5 - 1
         mean_arousals[aux] = (mean_arousals[aux])/5 - 1
 
-    split = 0.5
+    split = 0.9
     train_labels = [mean_valences[:int(len(mean_valences) * split)], mean_arousals[:int(len(mean_arousals) * split)]]
     test_labels = [mean_valences[int(len(mean_valences) * split):], mean_arousals[int(len(mean_arousals) * split):]]
     train_dataset = dataset[:int(len(dataset) * split)]
@@ -99,7 +99,7 @@ def main():
         model.summary()
 
         EPOCHS = 1000
-        # es_callback = tf.keras.callbacks.EarlyStopping(monitor='mse', patience=10)
+        es_callback = tf.keras.callbacks.EarlyStopping(monitor='mse', patience=10)
         history = model.fit(
             train_dataset, train_labels,
             epochs=EPOCHS, validation_split=0.2, verbose=0, shuffle=True,
@@ -110,10 +110,16 @@ def main():
 
     model = tf.keras.models.load_model("model")
 
+    weights = model.get_weights()
+    single_in_model = get_model()
+    single_in_model.set_weights(weights)
+    single_in_model.compile(loss='mae', optimizer=tf.keras.optimizers.Adam(), metrics=['mae', 'mse'])
+
     print("Evaluate")
     result = model.evaluate(test_dataset, test_labels)
     print(dict(zip(model.metrics_names, result)))
 
+    test_dataset = dataset[-1]
     prediction = model.predict(test_dataset)
     test_points = []
     pred_points = []

@@ -43,5 +43,11 @@
         "arquivo": "30192__erh__string-1-loop.wav",
         "bpm": 117.45383522727273,
         "spectogram": "spectograms\\30192__erh__string-1-loop.jpg"
+    },
+    "10": {
+        "arquivo": "30190__erh__cello-6-loop.wav",
+        "bpm": 95.703125,
+        "valence": 0,
+        "arousal": 0
     }
 }

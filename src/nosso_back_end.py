@@ -1,3 +1,4 @@
+import matplotlib.pyplot as plt
 import numpy as np
 from PyQt5.QtCore import QThread, pyqtSignal
 import librosa.display
@@ -20,6 +21,19 @@ fh = logging.FileHandler(os.path.join("..", "rem.log"))
 fh.setLevel(logging.INFO)
 fh.setFormatter(fmt)
 logger.addHandler(fh)
+
+
+def make_va_plot(predict, path):
+    plt.figure(figsize=(4.5, 4.5))
+    plt.xlim([-1, 1])
+    plt.ylim([-1, 1])
+    plt.plot([-1, 1], [0, 0], color="gray")
+    plt.plot([0, 0], [-1, 1], color="gray")
+    plt.scatter(predict[0], predict[1], s=150, color="lightblue")
+    plt.savefig(path)
+    plt.close()
+    return path
+
 
 class ThreadedProcessarLista(QThread):
 
@@ -48,8 +62,9 @@ class ThreadedProcessarLista(QThread):
             resultado = processamento_basico_amostra(amostra)
             self.progresso_parcial.emit(10)
             predict = processamento_CRNN_amostra(amostra)
-            #resultado['valence'] = 0
-            #resultado['arousal'] = 0
+            resultado['valence'] = float(predict[0][0])
+            resultado['arousal'] = float(predict[1][0])
+            make_va_plot(predict, 'temp.png')
             # TODO: Processamento maior + Atualiza barra de progresso
 
             # Atualiza barra de progresso
@@ -84,8 +99,9 @@ def processamento_CRNN_amostra(amostra):
     melgram = librosa.feature.melspectrogram(y=sig, sr=fs, hop_length=hl,)
     melgram = melgram[:, :64]
     melgram_p = librosa.power_to_db(melgram, ref=np.max)
-    melgram_p.reshape(128, 64, 1)
+    melgram_p = melgram_p.reshape(128, 64)
+    melgram_p = [melgram_p]
     model = tf.keras.models.load_model("./../crnn/model", compile=True)
-    prediction = model.predict(np.array([melgram_p,]), batch_size=1)
+    prediction = model.predict(np.array(melgram_p), batch_size=1)
     logger.info("Resultado: {}".format(prediction))
     return prediction

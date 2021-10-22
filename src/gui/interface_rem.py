@@ -3,14 +3,13 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QMessageBox, QListWidgetItem
 import os
-
 from matplotlib import pyplot as plt
-
 import popup_progresso
 import pandas as pd
 
-import src.handler_historico as handler_historico
-import src.nosso_back_end as nosso_back_end
+import os.path, sys
+sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir))
+import handler_historico, nosso_back_end
 
 #serviço de Log
 import logging

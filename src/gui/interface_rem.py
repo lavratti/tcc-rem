@@ -3,6 +3,9 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QMessageBox, QListWidgetItem
 import os
+
+from matplotlib import pyplot as plt
+
 import popup_progresso
 import pandas as pd
 
@@ -347,7 +350,7 @@ class Ui_Form(object):
         dict_resultado = self.historico.buscar_ultimo()
         string_formatada = formatar_resultado(dict_resultado)
         self.tela_resultado_textBrowser.setText(string_formatada)
-        pixmap = QPixmap(dict_resultado['spectogram'])
+        pixmap = QPixmap("temp.png")
         self.tela_resultado_label_figura.setPixmap(pixmap)
         index = self.stackedWidget.indexOf(self.tela_resultado)
         self.stackedWidget.setCurrentIndex(index)
@@ -377,14 +380,23 @@ class Ui_Form(object):
             if self.tela_historico_listWidget.item(index).checkState() == Qt.Checked:
                 checked_items.append(self.tela_historico_listWidget.item(index).text())
         logger.debug(checked_items)
-        string_formatada = "[PLACEHOLDER FOR IMG]\n"
+        historico = self.historico.buscar_historico()
+        plt.figure(figsize=(4.5, 4.5))
+        plt.xlim([-1, 1])
+        plt.ylim([-1, 1])
+        plt.plot([-1, 1], [0, 0], color="gray")
+        plt.plot([0, 0], [-1, 1], color="gray")
         for i in checked_items:
             key = i.split(sep=" ")[0]
-            string_formatada += "{}\n".format(key)
-        string_formatada += "[PLACEHOLDER FOR IMG]"
+            valence = historico[key]['valence']
+            arousal = historico[key]['arousal']
+            plt.scatter(valence, arousal, s=150)
+        plt.savefig('temp_hist.png')
+        plt.close()
 
         # Texto em baixo da lista
-        self.tela_historico_label_figura.setText(string_formatada)
+        pixmap2 = QPixmap("temp_hist.png")
+        self.tela_historico_label_figura.setPixmap(pixmap2)
         if not len(self.tela_historico_listWidget.selectedItems()) == 0:
             item = self.tela_historico_listWidget.selectedItems()[0]
             key = item.text().split(sep=" ")[0]

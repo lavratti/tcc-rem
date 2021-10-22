@@ -5,7 +5,7 @@ import os
 class Historico:
 
     def __init__(self, arquivo):
-        if not arquivo:
+        if arquivo is None:
             raise ValueError
         else:
             self.arquivo = arquivo

@@ -1,0 +1,17 @@
+2021-10-30 23:12:50,981 | __main__ | INFO | Thread de processamento iniciada
+2021-10-30 23:15:30,607 | __main__ | INFO | Thread de processamento finalizada
+2021-10-30 23:23:32,702 | __main__ | INFO | Thread de processamento iniciada
+2021-10-30 23:24:03,384 | __main__ | INFO | Thread de processamento finalizada
+2021-10-30 23:35:08,309 | __main__ | INFO | Histórico importado com sucesso
+2021-10-30 23:35:24,114 | __main__ | INFO | Thread de processamento iniciada
+2021-10-30 23:35:25,649 | __main__ | INFO | Thread de processamento finalizada
+2021-10-30 23:36:04,947 | __main__ | INFO | Histórico importado com sucesso
+2021-10-30 23:36:26,681 | __main__ | INFO | Histórico importado com sucesso
+2021-10-30 23:36:33,428 | __main__ | INFO | Histórico importado com sucesso
+2021-10-30 23:36:43,530 | __main__ | INFO | Thread de processamento iniciada
+2021-10-30 23:36:58,850 | __main__ | INFO | Thread de processamento finalizada
+2021-10-30 23:38:09,945 | __main__ | INFO | Histórico importado com sucesso
+2021-10-30 23:38:24,298 | __main__ | INFO | Thread de processamento iniciada
+2021-10-30 23:38:49,863 | __main__ | INFO | Thread de processamento finalizada
+2021-10-31 12:30:38,241 | __main__ | INFO | Thread de processamento iniciada
+2021-10-31 12:33:00,156 | __main__ | INFO | Thread de processamento finalizada

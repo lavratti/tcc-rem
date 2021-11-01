@@ -24,7 +24,7 @@ def plot_history(history):
     pylab.plot(hist['epoch'], hist['arousal_mae'], label='arousal_mae')
     pylab.plot(hist['epoch'], hist['val_arousal_mae'], label='val_arousal_mae')
     pylab.legend()
-    pylab.savefig('last_result_MAE.png')
+    pylab.savefig(os.path.join(crrn_folder_path, 'last_result_MAE.png'))
     pylab.close()
 
     pylab.xlabel('Epoch')
@@ -94,7 +94,7 @@ def main():
         mean_arousals[aux] = (mean_arousals[aux])/5 - 1
     
     
-    split = 0.9
+    split = 0.6
     train_labels = [mean_valences[:int(len(mean_valences) * split)], mean_arousals[:int(len(mean_arousals) * split)]]
     test_labels = [mean_valences[int(len(mean_valences) * split):], mean_arousals[int(len(mean_arousals) * split):]]
     train_dataset = dataset[:int(len(dataset) * split)]
@@ -118,7 +118,7 @@ def main():
             epochs=EPOCHS, validation_split=0.2, verbose=0, shuffle=True,
             callbacks=[tfa.callbacks.TQDMProgressBar(show_epoch_progress=False), es_callback])
 
-        model.save("model")
+        model.save(os.path.join(crrn_folder_path, "model"))
         plot_history(history)
     else:
         print("Modelo salvo encontrado.")
@@ -131,8 +131,7 @@ def main():
     single_in_model.set_weights(weights)
     single_in_model.compile(loss='mse', optimizer=tf.keras.optimizers.Adam(), metrics=['mae', 'mse'])
 
-    test_dataset = np.reshape(dataset[-1], (1, 128, 64, 1))
-    prediction = model.predict(test_dataset, batch_size=1)
+    prediction = model.predict(test_dataset)
 
     plot_prediction_results(test_labels, prediction)
     

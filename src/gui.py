@@ -9,9 +9,6 @@ import popup_progresso
 import os.path, sys
 import handler_historico, backend
 
-src_folder_path = (os.path.dirname(os.path.realpath(__file__)))
-img_folder_path = os.path.join(src_folder_path, "imgs")
-
 #serviço de Log
 import logging
 logger = logging.getLogger(__name__)
@@ -21,13 +18,25 @@ ch = logging.StreamHandler()
 ch.setLevel(logging.DEBUG)
 ch.setFormatter(fmt)
 logger.addHandler(ch)
-fh = logging.FileHandler(os.path.join(src_folder_path, "..", "rem_log.txt"))
+fh = logging.FileHandler(os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "rem_log.txt"))
 fh.setLevel(logging.INFO)
 fh.setFormatter(fmt)
 logger.addHandler(fh)
-
-# add ch to logger
 logger.addHandler(ch)
+
+
+src_folder_path = os.path.dirname(os.path.realpath(__file__))
+img_folder_path = os.path.join(src_folder_path, "imgs")
+va_space_bg_img_path = os.path.join(img_folder_path, "img1.png")
+
+def formatar_resultado(dict_resultado):
+    # Formatador de dict para string
+    s = ""
+    for key in dict_resultado:
+        s += "{}: {}\n\n".format(key, dict_resultado[key])
+    return s
+
+
 class Ui_Form(object):
 
     def __init__(self, Form):
@@ -174,13 +183,13 @@ class Ui_Form(object):
         self.tela_resultado_label_1.setGeometry(QtCore.QRect(0, 20, 800, 40))
         self.tela_resultado_label_1.setAlignment(QtCore.Qt.AlignCenter)
         self.tela_resultado_label_1.setObjectName("tela_resultado_label_1")
-        self.tela_resultado_textBrowser = QtWidgets.QTextBrowser(self.tela_resultado)
-        self.tela_resultado_textBrowser.setGeometry(QtCore.QRect(10, 70, 311, 531))
-        self.tela_resultado_textBrowser.setObjectName("tela_resultado_textBrowser")
+        self.tela_resultado_text_browser = QtWidgets.QTextBrowser(self.tela_resultado)
+        self.tela_resultado_text_browser.setGeometry(QtCore.QRect(10, 70, 311, 531))
+        self.tela_resultado_text_browser.setObjectName("tela_resultado_text_browser")
         self.tela_resultado_label_figura = QtWidgets.QLabel(self.tela_resultado)
         self.tela_resultado_label_figura.setGeometry(QtCore.QRect(330, 75, 450, 470))
         self.tela_resultado_label_figura.setText("")
-        self.tela_resultado_label_figura.setPixmap(QtGui.QPixmap(os.path.join(img_folder_path, "img1.png")))
+        self.tela_resultado_label_figura.setPixmap(QtGui.QPixmap(va_space_bg_img_path))
         self.tela_resultado_label_figura.setScaledContents(False)
         self.tela_resultado_label_figura.setObjectName("tela_resultado_label_figura")
         self.tela_resultado_splitter = QtWidgets.QSplitter(self.tela_resultado)
@@ -192,7 +201,7 @@ class Ui_Form(object):
         self.stackedWidget.addWidget(self.tela_resultado)
         # Textos da tela
         self.tela_resultado_label_1.setText("Resultado")
-        self.tela_resultado_textBrowser.setHtml("")
+        self.tela_resultado_text_browser.setHtml("")
         self.tela_resultado_botao_voltar.setText("Voltar")
 
         # =============================================================================================================
@@ -207,7 +216,7 @@ class Ui_Form(object):
         self.tela_historico_label_figura = QtWidgets.QLabel(self.tela_historico)
         self.tela_historico_label_figura.setGeometry(QtCore.QRect(330, 64, 450, 481))
         self.tela_historico_label_figura.setText("")
-        self.tela_resultado_label_figura.setPixmap(QtGui.QPixmap(os.path.join(img_folder_path, "img1.png")))
+        self.tela_resultado_label_figura.setPixmap(QtGui.QPixmap(va_space_bg_img_path))
         self.tela_historico_label_figura.setScaledContents(False)
         self.tela_historico_label_figura.setObjectName("tela_historico_label_figura")
         self.tela_historico_splitter_listas = QtWidgets.QSplitter(self.tela_historico)
@@ -282,11 +291,11 @@ class Ui_Form(object):
         try:
             dict_resultado = self.historico.buscar_ultimo()
         except:
-            logging.error("Erro ao buscar ultimo no histórico.")
+            logging.error("Erro ao buscar histórico (guy.py linha 292).")
             exit()
         string_formatada = formatar_resultado(dict_resultado)
-        self.tela_resultado_textBrowser.setText(string_formatada)
-        pixmap = QPixmap("temp.png")
+        self.tela_resultado_text_browser.setText(string_formatada)
+        pixmap = QPixmap(os.path.join(img_folder_path, 'temp.png'))
         self.tela_resultado_label_figura.setPixmap(pixmap)
         index = self.stackedWidget.indexOf(self.tela_resultado)
         self.stackedWidget.setCurrentIndex(index)
@@ -299,7 +308,7 @@ class Ui_Form(object):
         try:
             dict_resultados = self.historico.buscar_historico()
         except:
-            logging.error("Erro ao buscar histórico.")
+            logging.error("Erro ao buscar histórico (guy.py linha 309).")
             exit()
         for key in sorted(dict_resultados, key=int):
             text = "{}  {}".format(key, dict_resultados[key]['arquivo'])
@@ -323,7 +332,7 @@ class Ui_Form(object):
         try:
             historico = self.historico.buscar_historico()
         except:
-            logging.error("Erro ao buscar histórico.")
+            logging.error("Erro ao buscar histórico (guy.py linha 333).")
             exit()
         plt.figure(figsize=(4.5, 4.5))
         plt.xlim([-1, 1])
@@ -331,13 +340,15 @@ class Ui_Form(object):
         plt.axis('off')
         for i in checked_items:
             key = i.split(sep=" ")[0]
-            valence = historico[key]['valence']
-            arousal = historico[key]['arousal']
-            plt.scatter(valence, arousal, s=150)
+            valence = max(min(historico[key]['valence'], 1), -1)
+            arousal = max(min(historico[key]['arousal'], 1), -1)
+            plt.scatter(valence, arousal, s=400)         
+            n = str(historico[key]['arquivo']).split()[0]
+            plt.annotate(n, (valence-0.02,arousal-0.02))
         path = os.path.join(img_folder_path, "temp.png")
         plt.savefig(path, transparent=True)
         plt.close()
-        background = Image.open(os.path.join(img_folder_path, "img1.png"), 'r').convert("RGBA")
+        background = Image.open(va_space_bg_img_path, 'r').convert("RGBA")
         foreground = Image.open(path, 'r').convert("RGBA")
         bg_w, bg_h = background.size
         img_w, img_h = foreground.size
@@ -353,7 +364,7 @@ class Ui_Form(object):
             try:
                 dict_resultados = self.historico.buscar_historico()
             except:
-                logging.error("Erro ao buscar histórico.")
+                logging.error("Erro ao buscar histórico (guy.py linha 363).")
                 exit()
             string_formatada = formatar_resultado(dict_resultados[key])
             self.tela_historico_textBrowser.setText(string_formatada)
@@ -506,15 +517,6 @@ class Ui_Form(object):
                 exit()
             self.mudar_tela_historico()
             logger.info('Histórico importado com sucesso')
-
-
-def formatar_resultado(dict_resultado):
-    # Formatador de dict para string
-    s = ""
-    for key in dict_resultado:
-        s += "{}: {}\n\n".format(key, dict_resultado[key])
-    return s
-
 
 if __name__ == "__main__":
     import sys

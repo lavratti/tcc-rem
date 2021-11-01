@@ -1,3 +1,4 @@
+from PIL import Image
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap
@@ -5,11 +6,11 @@ from PyQt5.QtWidgets import QMessageBox, QListWidgetItem
 import os
 from matplotlib import pyplot as plt
 import popup_progresso
-import pandas as pd
-
 import os.path, sys
-sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir))
-import handler_historico, nosso_back_end
+import handler_historico, backend
+
+src_folder_path = (os.path.dirname(os.path.realpath(__file__)))
+img_folder_path = os.path.join(src_folder_path, "imgs")
 
 #serviço de Log
 import logging
@@ -20,7 +21,7 @@ ch = logging.StreamHandler()
 ch.setLevel(logging.DEBUG)
 ch.setFormatter(fmt)
 logger.addHandler(ch)
-fh = logging.FileHandler(os.path.join("..", "rem.log"))
+fh = logging.FileHandler(os.path.join(src_folder_path, "..", "rem_log.txt"))
 fh.setLevel(logging.INFO)
 fh.setFormatter(fmt)
 logger.addHandler(fh)
@@ -33,8 +34,11 @@ class Ui_Form(object):
 
         # Declaração de variaveis do programa para acessar via objeto do gui
         self.proxima_tela = 0
-        self.historico = handler_historico.Historico("historico.json")
-        with open('sobre.html', 'r') as fp:
+        try:
+            self.historico = handler_historico.Historico(os.path.join(src_folder_path, "historico.json"))
+        except:
+            logging.error("Erro ao carregar histórico.")
+        with open(os.path.join(src_folder_path, 'sobre.html'), 'r') as fp:
             self.texto_sobre = fp.read()
 
         # =============================================================================================================
@@ -83,8 +87,7 @@ class Ui_Form(object):
         self.tela_inicial_botao_reconhecer.setObjectName("tela_inicial_botao_reconhecer")
         self.tela_inicial_botao_historico = QtWidgets.QPushButton(self.tela_inicial_splitter)
         self.tela_inicial_botao_historico.setObjectName("tela_inicial_botao_historico")
-        self.tela_inicial_botao_config = QtWidgets.QPushButton(self.tela_inicial_splitter)
-        self.tela_inicial_botao_config.setObjectName("tela_inicial_botao_config")
+    
         self.tela_inicial_botao_sobre = QtWidgets.QPushButton(self.tela_inicial_splitter)
         self.tela_inicial_botao_sobre.setObjectName("tela_inicial_botao_sobre")
         self.stackedWidget.addWidget(self.tela_inicial)
@@ -95,7 +98,6 @@ class Ui_Form(object):
                                           "Curitiba, 2021")
         self.tela_inicial_botao_reconhecer.setText("Reconhecer")
         self.tela_inicial_botao_historico.setText("Histórico")
-        self.tela_inicial_botao_config.setText("Configurações")
         self.tela_inicial_botao_sobre.setText("Sobre")
 
         # =============================================================================================================
@@ -178,7 +180,7 @@ class Ui_Form(object):
         self.tela_resultado_label_figura = QtWidgets.QLabel(self.tela_resultado)
         self.tela_resultado_label_figura.setGeometry(QtCore.QRect(330, 75, 450, 470))
         self.tela_resultado_label_figura.setText("")
-        self.tela_resultado_label_figura.setPixmap(QtGui.QPixmap(".\\src\\gui\\../A.gif"))
+        self.tela_resultado_label_figura.setPixmap(QtGui.QPixmap(os.path.join(img_folder_path, "img1.png")))
         self.tela_resultado_label_figura.setScaledContents(False)
         self.tela_resultado_label_figura.setObjectName("tela_resultado_label_figura")
         self.tela_resultado_splitter = QtWidgets.QSplitter(self.tela_resultado)
@@ -205,7 +207,7 @@ class Ui_Form(object):
         self.tela_historico_label_figura = QtWidgets.QLabel(self.tela_historico)
         self.tela_historico_label_figura.setGeometry(QtCore.QRect(330, 64, 450, 481))
         self.tela_historico_label_figura.setText("")
-        self.tela_historico_label_figura.setPixmap(QtGui.QPixmap(".\\src\\gui\\../A.gif"))
+        self.tela_resultado_label_figura.setPixmap(QtGui.QPixmap(os.path.join(img_folder_path, "img1.png")))
         self.tela_historico_label_figura.setScaledContents(False)
         self.tela_historico_label_figura.setObjectName("tela_historico_label_figura")
         self.tela_historico_splitter_listas = QtWidgets.QSplitter(self.tela_historico)
@@ -245,77 +247,11 @@ class Ui_Form(object):
         self.tela_historico_botao_voltar.setText("Voltar")
 
         # =============================================================================================================
-        # Constroi a tela de configuração
-        # todo Esta tela de configuração é apenas uma demonstração!
-        # =============================================================================================================
-        self.tela_configs = QtWidgets.QWidget()
-        self.tela_configs.setObjectName("tela_configs")
-        self.tela_configs_label_1 = QtWidgets.QLabel(self.tela_configs)
-        self.tela_configs_label_1.setGeometry(QtCore.QRect(10, 20, 771, 41))
-        self.tela_configs_label_1.setAlignment(QtCore.Qt.AlignCenter)
-        self.tela_configs_label_1.setObjectName("tela_configs_label_1")
-        self.tela_configs_checkBox = QtWidgets.QCheckBox(self.tela_configs)
-        self.tela_configs_checkBox.setGeometry(QtCore.QRect(20, 200, 181, 20))
-        self.tela_configs_checkBox.setObjectName("tela_configs_checkBox")
-        self.tela_configs_checkBox_2 = QtWidgets.QCheckBox(self.tela_configs)
-        self.tela_configs_checkBox_2.setGeometry(QtCore.QRect(20, 240, 181, 20))
-        self.tela_configs_checkBox_2.setObjectName("tela_configs_checkBox_2")
-        self.tela_configs_checkBox_3 = QtWidgets.QCheckBox(self.tela_configs)
-        self.tela_configs_checkBox_3.setGeometry(QtCore.QRect(20, 280, 181, 20))
-        self.tela_configs_checkBox_3.setObjectName("tela_configs_checkBox_3")
-        self.tela_configs_checkBox_4 = QtWidgets.QCheckBox(self.tela_configs)
-        self.tela_configs_checkBox_4.setGeometry(QtCore.QRect(20, 320, 181, 20))
-        self.tela_configs_checkBox_4.setObjectName("tela_configs_checkBox_4")
-        self.tela_configs_pushButton_18 = QtWidgets.QPushButton(self.tela_configs)
-        self.tela_configs_pushButton_18.setGeometry(QtCore.QRect(20, 380, 161, 28))
-        self.tela_configs_pushButton_18.setObjectName("tela_configs_pushButton_18")
-        self.tela_configs_splitter_rodape = QtWidgets.QSplitter(self.tela_configs)
-        self.tela_configs_splitter_rodape.setGeometry(QtCore.QRect(12, 560, 771, 41))
-        self.tela_configs_splitter_rodape.setOrientation(QtCore.Qt.Horizontal)
-        self.tela_configs_splitter_rodape.setObjectName("tela_configs_splitter_rodape")
-        self.tela_configs_botao_salvar = QtWidgets.QPushButton(self.tela_configs_splitter_rodape)
-        self.tela_configs_botao_salvar.setObjectName("tela_configs_botao_salvar")
-        self.tela_configs_voltar_sem_salvar = QtWidgets.QPushButton(self.tela_configs_splitter_rodape)
-        self.tela_configs_voltar_sem_salvar.setObjectName("tela_configs_voltar_sem_salvar")
-        self.tela_configs_botao_reset_configs = QtWidgets.QPushButton(self.tela_configs_splitter_rodape)
-        self.tela_configs_botao_reset_configs.setObjectName("tela_configs_botao_reset_configs")
-        self.tela_configs_splitter_demo = QtWidgets.QSplitter(self.tela_configs)
-        self.tela_configs_splitter_demo.setGeometry(QtCore.QRect(17, 110, 761, 28))
-        self.tela_configs_splitter_demo.setOrientation(QtCore.Qt.Horizontal)
-        self.tela_configs_splitter_demo.setObjectName("tela_configs_splitter_demo")
-        self.radioButton = QtWidgets.QRadioButton(self.tela_configs_splitter_demo)
-        self.radioButton.setChecked(True)
-        self.radioButton.setObjectName("radioButton")
-        self.radioButton_2 = QtWidgets.QRadioButton(self.tela_configs_splitter_demo)
-        self.radioButton_2.setObjectName("radioButton_2")
-        self.radioButton_3 = QtWidgets.QRadioButton(self.tela_configs_splitter_demo)
-        self.radioButton_3.setObjectName("radioButton_3")
-        self.radioButton_4 = QtWidgets.QRadioButton(self.tela_configs_splitter_demo)
-        self.radioButton_4.setObjectName("radioButton_4")
-        self.stackedWidget.addWidget(self.tela_configs)
-        self.stackedWidget.setCurrentIndex(0)
-        # Textos da tela
-        self.tela_configs_label_1.setText("Configurações")
-        self.tela_configs_checkBox.setText("CheckBox")
-        self.tela_configs_checkBox_2.setText("CheckBox")
-        self.tela_configs_checkBox_3.setText("CheckBox")
-        self.tela_configs_checkBox_4.setText("CheckBox")
-        self.tela_configs_pushButton_18.setText("PushButton")
-        self.tela_configs_botao_salvar.setText("Salvar alterações")
-        self.tela_configs_voltar_sem_salvar.setText("Voltar sem salvar")
-        self.tela_configs_botao_reset_configs.setText("Voltar as configurações originais")
-        self.radioButton.setText("RadioButton")
-        self.radioButton_2.setText("RadioButton")
-        self.radioButton_3.setText("RadioButton")
-        self.radioButton_4.setText("RadioButton")
-
-        # =============================================================================================================
         # Acerta os slots entre os elementos da interface gráfica e as funções de tratamento correspondente
         # =============================================================================================================
         QtCore.QMetaObject.connectSlotsByName(Form)
         self.tela_inicial_botao_reconhecer.clicked.connect(self.mudar_tela_reconhecer)
         self.tela_inicial_botao_historico.clicked.connect(self.mudar_tela_historico)
-        self.tela_inicial_botao_config.clicked.connect(self.mudar_tela_config)
         self.tela_inicial_botao_sobre.clicked.connect(self.mudar_tela_sobre)
         self.tela_sobre_botao_voltar.clicked.connect(self.mudar_tela_inicial)
         self.tela_reco_botao_voltar.clicked.connect(self.mudar_tela_inicial)
@@ -328,9 +264,6 @@ class Ui_Form(object):
         self.tela_historico_botao_voltar.clicked.connect(self.mudar_tela_inicial)
         self.tela_historico_listWidget.itemSelectionChanged.connect(self.atualizar_tela_historico)
         self.tela_historico_listWidget.itemChanged.connect(self.atualizar_tela_historico)
-        self.tela_configs_botao_salvar.clicked.connect(self.salvar_configuracoes)
-        self.tela_configs_voltar_sem_salvar.clicked.connect(self.mudar_tela_inicial)
-        self.tela_configs_botao_reset_configs.clicked.connect(self.voltar_as_configuracoes_iniciais)
         self.tela_reco_listWidget.itemDoubleClicked.connect(self.remover_amostra)
 
     # =================================================================================================================
@@ -346,7 +279,11 @@ class Ui_Form(object):
     def mudar_tela_resultado(self):
         # Muda a tela para a tela "resultado"
         logger.debug("UI -> tela resultado")
-        dict_resultado = self.historico.buscar_ultimo()
+        try:
+            dict_resultado = self.historico.buscar_ultimo()
+        except:
+            logging.error("Erro ao buscar ultimo no histórico.")
+            exit()
         string_formatada = formatar_resultado(dict_resultado)
         self.tela_resultado_textBrowser.setText(string_formatada)
         pixmap = QPixmap("temp.png")
@@ -359,7 +296,11 @@ class Ui_Form(object):
         logger.debug("UI -> tela historico")
         index = self.stackedWidget.indexOf(self.tela_historico)
         self.tela_historico_listWidget.clear()
-        dict_resultados = self.historico.buscar_historico()
+        try:
+            dict_resultados = self.historico.buscar_historico()
+        except:
+            logging.error("Erro ao buscar histórico.")
+            exit()
         for key in sorted(dict_resultados, key=int):
             text = "{}  {}".format(key, dict_resultados[key]['arquivo'])
             item = QListWidgetItem(text)
@@ -379,27 +320,41 @@ class Ui_Form(object):
             if self.tela_historico_listWidget.item(index).checkState() == Qt.Checked:
                 checked_items.append(self.tela_historico_listWidget.item(index).text())
         logger.debug(checked_items)
-        historico = self.historico.buscar_historico()
+        try:
+            historico = self.historico.buscar_historico()
+        except:
+            logging.error("Erro ao buscar histórico.")
+            exit()
         plt.figure(figsize=(4.5, 4.5))
         plt.xlim([-1, 1])
         plt.ylim([-1, 1])
-        plt.plot([-1, 1], [0, 0], color="gray")
-        plt.plot([0, 0], [-1, 1], color="gray")
+        plt.axis('off')
         for i in checked_items:
             key = i.split(sep=" ")[0]
             valence = historico[key]['valence']
             arousal = historico[key]['arousal']
             plt.scatter(valence, arousal, s=150)
-        plt.savefig('temp_hist.png')
+        path = os.path.join(img_folder_path, "temp.png")
+        plt.savefig(path, transparent=True)
         plt.close()
+        background = Image.open(os.path.join(img_folder_path, "img1.png"), 'r').convert("RGBA")
+        foreground = Image.open(path, 'r').convert("RGBA")
+        bg_w, bg_h = background.size
+        img_w, img_h = foreground.size
+        offset = ((bg_w - img_w) // 2, (bg_h - img_h) // 2)
+        background.paste(foreground, offset, mask=foreground)
+        background.save(path)
 
-        # Texto em baixo da lista
-        pixmap2 = QPixmap("temp_hist.png")
+        pixmap2 = QPixmap(path)
         self.tela_historico_label_figura.setPixmap(pixmap2)
         if not len(self.tela_historico_listWidget.selectedItems()) == 0:
             item = self.tela_historico_listWidget.selectedItems()[0]
             key = item.text().split(sep=" ")[0]
-            dict_resultados = self.historico.buscar_historico()
+            try:
+                dict_resultados = self.historico.buscar_historico()
+            except:
+                logging.error("Erro ao buscar histórico.")
+                exit()
             string_formatada = formatar_resultado(dict_resultados[key])
             self.tela_historico_textBrowser.setText(string_formatada)
 
@@ -409,11 +364,6 @@ class Ui_Form(object):
         for index in range(self.tela_historico_listWidget.count()):
             self.tela_historico_listWidget.item(index).setCheckState(QtCore.Qt.Unchecked)
 
-    def mudar_tela_config(self):
-        # Muda a tela para a tela de configurações
-        logger.debug("UI -> tela config")
-        index = self.stackedWidget.indexOf(self.tela_configs)
-        self.stackedWidget.setCurrentIndex(index)
 
     def mudar_tela_sobre(self):
         # Muda a tela para a tela "sobre"
@@ -433,7 +383,7 @@ class Ui_Form(object):
         file_filter = 'Audio File (*.wav)'
         response = QtWidgets.QFileDialog.getOpenFileNames(
             caption='Select a data file',
-            directory=os.path.join(os.getcwd(), os.pardir, os.pardir, 'amostras_exemplo'),
+            directory=os.path.join(src_folder_path, '..'),
             filter=file_filter,
             initialFilter=file_filter
         )
@@ -495,7 +445,7 @@ class Ui_Form(object):
             self.pop_up.activateWindow()
 
             # Então prosseguimos para criar uma thread de processamento
-            self.thread = nosso_back_end.ThreadedProcessarLista(parent=None,
+            self.thread = backend.ThreadedProcessarLista(parent=None,
                                                                 amostras=lista_de_amostras,
                                                                 historico=self.historico)
 
@@ -521,21 +471,22 @@ class Ui_Form(object):
         self.pop_up.destroy()
 
     def exportar_historico(self):
-        # Exporta o histórico como JSON e como CSV no mesmo diretório
+        # Exporta o histórico como JSON
         logger.debug('Exportando histórico')
-        response = QtWidgets.QFileDialog.getExistingDirectory(
+        file_filter = 'JSON File (*.json)'
+        response = QtWidgets.QFileDialog.getSaveFileName(
             caption='Select a destiantion to export files',
-            directory=os.path.join(os.getcwd())
+            directory=os.path.join(src_folder_path, '..'),
+            filter=file_filter,
+            initialFilter=file_filter
         )
+        response = response[0]
         if not response == "":
-            if not os.path.exists(os.path.join(response, "export_rem")):
-                os.makedirs(os.path.join(response, "export_rem"))
-            path = os.path.join(response, "export_rem", "{}.export.json".format(response[0]))
-            self.historico.exportar(path)
-            path = os.path.join(response, "export_rem", "{}.export.csv".format(response[0]))
-            df = pd.DataFrame(data=self.historico.buscar_historico())
-            df.to_csv(path)
-            logger.info('Arquivos exportados para {}'.format(os.path.join(response, "export_rem")))
+            try:
+                self.historico.exportar(response)
+            except Exception as e:
+                logging.error("Erro ao exportar histórico. {}".format(repr(e)))
+                exit()
 
     def importar_historico(self):
         # Importa um histórico salvo anteriormente em formato JSON
@@ -543,32 +494,18 @@ class Ui_Form(object):
         file_filter = 'JSON File (*.json)'
         response = QtWidgets.QFileDialog.getOpenFileName(
             caption='Select a json file',
-            directory=os.path.join(os.getcwd()),
+            directory=os.path.join(src_folder_path, '..'),
             filter=file_filter,
             initialFilter=file_filter
         )
         if not response[0] == "":
-            self.historico.importar(response[0])
+            try:
+                self.historico.importar(response[0])
+            except:
+                logging.error("Erro ao importar histórico.")
+                exit()
             self.mudar_tela_historico()
             logger.info('Histórico importado com sucesso')
-
-    def salvar_configuracoes(self):
-        # Place holder função de salvamento de configurações
-        logger.debug('Chamada salvar_configuracoes')
-        msg = QMessageBox()
-        msg.setWindowTitle("CRNN-REM - Ainda não implementad!")
-        msg.setText("A função \"salvar_configuracoes\" ainda não foi implementada.")
-        msg.setIcon(QMessageBox.Warning)
-        msg.exec_()
-
-    def voltar_as_configuracoes_iniciais(self):
-        # Place holder função de voltar às configurações iniciais
-        logger.debug('Chamada voltar_as_configuracoes_iniciais')
-        msg = QMessageBox()
-        msg.setWindowTitle("CRNN-REM - Ainda não implementad!")
-        msg.setText("A função \"voltar_as_configuracoes_iniciais\" ainda não foi implementada.")
-        msg.setIcon(QMessageBox.Warning)
-        msg.exec_()
 
 
 def formatar_resultado(dict_resultado):

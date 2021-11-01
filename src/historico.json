@@ -1,0 +1,56 @@
+{
+    "1": {
+        "arquivo": "Berserk 2016 OST - Blood and Guts and Guts and Blood.wav",
+        "bpm": 129.19921875,
+        "valence": -0.21460990607738495,
+        "arousal": -0.07471303641796112
+    },
+    "2": {
+        "arquivo": "Anti-Romantic.wav",
+        "bpm": 143.5546875,
+        "valence": -0.2284868210554123,
+        "arousal": -0.1319083571434021
+    },
+    "3": {
+        "arquivo": "Frost.wav",
+        "bpm": 95.703125,
+        "valence": -0.21460990607738495,
+        "arousal": -0.07471303641796112
+    },
+    "4": {
+        "arquivo": "No Rules.wav",
+        "bpm": 117.45383522727273,
+        "valence": -0.25171682238578796,
+        "arousal": -0.13612303137779236
+    },
+    "5": {
+        "arquivo": "TXT (\ud22c\ubaa8\ub85c\uc6b0\ubc14\uc774\ud22c\uac8c\ub354) '0X1=LOVESONG (I Know I Love You) feat. Seori' Official MV.wav",
+        "bpm": 103.359375,
+        "valence": -0.21460990607738495,
+        "arousal": -0.07471303641796112
+    },
+    "6": {
+        "arquivo": "TXT (\ud22c\ubaa8\ub85c\uc6b0\ubc14\uc774\ud22c\uac8c\ub354) 'Magic' Official MV.wav",
+        "bpm": 107.666015625,
+        "valence": -0.21460990607738495,
+        "arousal": -0.07471303641796112
+    },
+    "7": {
+        "arquivo": "\ub514\uc5b4 \uc2a4\ud478\ud2b8\ub2c8\ud06c.wav",
+        "bpm": 123.046875,
+        "valence": -0.22234311699867249,
+        "arousal": -0.17775750160217285
+    },
+    "8": {
+        "arquivo": "\ubc38\ub7f0\uc2a4 \uac8c\uc784.wav",
+        "bpm": 95.703125,
+        "valence": -0.22948899865150452,
+        "arousal": -0.14526227116584778
+    },
+    "9": {
+        "arquivo": "\uc18c\uc545\ud589.wav",
+        "bpm": 99.38401442307692,
+        "valence": -0.15501590073108673,
+        "arousal": -0.21903830766677856
+    }
+}

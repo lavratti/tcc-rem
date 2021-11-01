@@ -1,9 +1,11 @@
 import csv
+import os
 import sys
 import numpy as np
 from tqdm import tqdm
 import pickle
 
+dataset_folder_path = (os.path.dirname(os.path.realpath(__file__)))
 
 def load(s=None, offset=0):
 
@@ -13,7 +15,8 @@ def load(s=None, offset=0):
     melspectograms_list = []
 
     print("Loading labels")
-    with open('dataset/annotations/static_annotations.csv', 'r') as f:
+    path = os.path.join(dataset_folder_path, "annotations", "static_annotations.csv")
+    with open(path, 'r') as f:
         reader = csv.reader(f, delimiter=',')
         for _ in range(1 + offset):
             next(reader)
@@ -28,7 +31,8 @@ def load(s=None, offset=0):
 
     print("Loading dataset mel-spectograms.")
     for n in tqdm(song_ids[:s], unit='files', file=sys.stdout):
-        with open('dataset/melgrams/melgram_power_to_db/{}.csv'.format(n), 'rb') as f:
+        path = os.path.join(dataset_folder_path, "melgrams", "melgram_power_to_db", "{}.csv".format(n))
+        with open(path, 'rb') as f:
             a = np.loadtxt(f, delimiter=',')
             a = np.resize(a, (128, 64))
             melspectograms_list.append(a)
@@ -46,13 +50,13 @@ def load(s=None, offset=0):
     return mean_arousals, mean_valences, melspectograms
 
 def quick_load():
-    mean_arousals = pickle.load(open('dataset/mean_arousals.pickle', 'rb'))
-    mean_valences = pickle.load(open('dataset/mean_valences.pickle', 'rb'))
-    melspectograms = pickle.load(open('dataset/melspectograms.pickle', 'rb'))
+    mean_arousals = pickle.load(open(os.path.join(dataset_folder_path, "mean_arousals.pickle"), 'rb'))
+    mean_valences = pickle.load(open(os.path.join(dataset_folder_path, "mean_valences.pickle"), 'rb'))
+    melspectograms = pickle.load(open(os.path.join(dataset_folder_path, "melspectograms.pickle"), 'rb'))
     return mean_arousals, mean_valences, melspectograms
 
 def gen_pickle():
     pickle_mean_arousals, pickle_mean_valences, pickle_melspectograms = load()
-    pickle.dump(pickle_mean_arousals, open('dataset/mean_arousals.pickle', 'wb+'))
-    pickle.dump(pickle_mean_valences, open('dataset/mean_valences.pickle', 'wb+'))
-    pickle.dump(pickle_melspectograms, open('dataset/melspectograms.pickle', 'wb+'))
+    pickle.dump(pickle_mean_arousals, open(os.path.join(dataset_folder_path, "mean_arousals.pickle"), 'wb+'))
+    pickle.dump(pickle_mean_valences, open(os.path.join(dataset_folder_path, "mean_valences.pickle"), 'wb+'))
+    pickle.dump(pickle_melspectograms, open(os.path.join(dataset_folder_path, "melspectograms.pickle"), 'wb+'))

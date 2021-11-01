@@ -2,103 +2,103 @@
     "1": {
         "arquivo": "1 - Music.wav",
         "bpm": 135.99917763157896,
-        "valence": -0.2059997171163559,
-        "arousal": -0.3376435935497284
+        "valence": 0.6522427201271057,
+        "arousal": -0.4311791658401489
     },
     "2": {
         "arquivo": "2 - Noise.wav",
         "bpm": 151.99908088235293,
-        "valence": -0.25171682238578796,
-        "arousal": -0.13612303137779236
+        "valence": -0.7922515273094177,
+        "arousal": 0.698380708694458
     },
     "3": {
         "arquivo": "3 - Shoemaker.wav",
         "bpm": 123.046875,
-        "valence": -0.25171682238578796,
-        "arousal": -0.13612303137779236
+        "valence": -0.8043507933616638,
+        "arousal": 0.6728353500366211
     },
     "4": {
         "arquivo": "4 - Harvest.wav",
         "bpm": 103.359375,
-        "valence": -0.33190977573394775,
-        "arousal": -0.1334535777568817
+        "valence": -0.9293983578681946,
+        "arousal": -0.5057553052902222
     },
     "5": {
         "arquivo": "5 - Pan.wav",
         "bpm": 135.99917763157896,
-        "valence": -0.21460990607738495,
-        "arousal": -0.07471303641796112
+        "valence": 0.8036742806434631,
+        "arousal": 1.5545635223388672
     },
     "6": {
         "arquivo": "6 - How's the Heart_.wav",
         "bpm": 103.359375,
-        "valence": -0.21460990607738495,
-        "arousal": -0.07471303641796112
+        "valence": 0.427533894777298,
+        "arousal": 1.0784896612167358
     },
     "7": {
         "arquivo": "7 - Procession.wav",
         "bpm": 135.99917763157896,
-        "valence": -0.2284868210554123,
-        "arousal": -0.1319083571434021
+        "valence": 0.458592027425766,
+        "arousal": -0.08727383613586426
     },
     "8": {
         "arquivo": "8 - Tribal.wav",
         "bpm": 99.38401442307692,
-        "valence": -0.21460990607738495,
-        "arousal": -0.07471303641796112
+        "valence": 0.3705979883670807,
+        "arousal": -0.6133171319961548
     },
     "9": {
         "arquivo": "9 - Endlessness.wav",
         "bpm": 89.10290948275862,
-        "valence": -0.2146141082048416,
-        "arousal": -0.0747302919626236
+        "valence": 0.752200186252594,
+        "arousal": -0.14506271481513977
     },
     "10": {
         "arquivo": "10 - All the Works of Nature Which Adorn the World - Vista.wav",
         "bpm": 123.046875,
-        "valence": -0.21460990607738495,
-        "arousal": -0.07471303641796112
+        "valence": 0.47737112641334534,
+        "arousal": -0.12558597326278687
     },
     "11": {
         "arquivo": "11 - All the Works of Nature Which Adorn the World - The Blue.wav",
         "bpm": 112.34714673913044,
-        "valence": -0.2284868210554123,
-        "arousal": -0.1319083571434021
+        "valence": 0.9271535277366638,
+        "arousal": -0.1968945562839508
     },
     "12": {
         "arquivo": "12 - All the Works of Nature Which Adorn the World - The Green.wav",
         "bpm": 112.34714673913044,
-        "valence": -0.15501590073108673,
-        "arousal": -0.21903830766677856
+        "valence": 0.3050784170627594,
+        "arousal": 0.2258790135383606
     },
     "13": {
         "arquivo": "13 - All the Works of Nature Which Adorn the World - Moors.wav",
         "bpm": 112.34714673913044,
-        "valence": -0.2284868210554123,
-        "arousal": -0.1319083571434021
+        "valence": 0.572089672088623,
+        "arousal": 0.6972005367279053
     },
     "14": {
         "arquivo": "14 - All the Works of Nature Which Adorn the World - Aurorae.wav",
         "bpm": 112.34714673913044,
-        "valence": -0.2284868210554123,
-        "arousal": -0.1319083571434021
+        "valence": 0.8268236517906189,
+        "arousal": 0.7393723726272583
     },
     "15": {
         "arquivo": "15 - All the Works of Nature Which Adorn the World - Quiet as the Snow.wav",
         "bpm": 123.046875,
-        "valence": -0.16265834867954254,
-        "arousal": -0.19258007407188416
+        "valence": -0.3459570109844208,
+        "arousal": -0.820184588432312
     },
     "16": {
         "arquivo": "16 - All the Works of Nature Which Adorn the World - Anthropocene (Including _Hurrian Hymn to Nikkal_).wav",
         "bpm": 99.38401442307692,
-        "valence": -0.2284868210554123,
-        "arousal": -0.1319083571434021
+        "valence": 0.37492552399635315,
+        "arousal": -0.6079996824264526
     },
     "17": {
         "arquivo": "17 - All the Works of Nature Which Adorn the World - Ad Astra.wav",
         "bpm": 112.34714673913044,
-        "valence": -0.12497776746749878,
-        "arousal": -0.1325594186782837
+        "valence": 0.22846756875514984,
+        "arousal": -0.6953738927841187
     }
 }
